@@ -20,7 +20,7 @@ AFRAME.registerComponent('barchart', {
   },
 
   generate: function (data) {
-
+    
     var histoWidth = 4.0,
         histoDepth = 4.0,
         histoHeight = 1.5; //in meters
@@ -39,8 +39,7 @@ AFRAME.registerComponent('barchart', {
     
     var zScale = d3.scaleLinear() 
       .range([0, -histoDepth]);
-    
-    var zScaleTicks = zScale.ticks(depthBinNum);
+
     var el = this.el;
     
     var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
@@ -49,11 +48,31 @@ AFRAME.registerComponent('barchart', {
     
     xScale.domain(widthDataArray);
     zScale.domain(dDataExtent);
+    var zScaleTicks = zScale.ticks(depthBinNum);
+        
+    var getBin = function(d) {
+      var i;
+      for (i = 0; i < zScaleTicks.length; i++) {
+        if (d < zScaleTicks[i]) break;
+      }
+      return {index: i, x0: zScaleTicks[i]};
+    }
+    
+    var bins = {}
+    data.forEach(function(d) {
+      if (!bins[d[chosen.wData]]) bins[d[chosen.wData]] = {};
+      var wbin = bins[d[chosen.wData]];
+      dbin = getBin(d[chosen.dData]);
+      const z = zScale(dbin.x0);
+      if (!wbin[z]) wbin[z] = 0;
+      const y = yScale(wbin[z]) + blockHeight / 2;
+      wbin[z] += 1
+    });
     
     var dHisto = d3.histogram()
       .thresholds(zScaleTicks)
       (depthDataArray);
-    
+
     var yScale = d3.scaleBand()
       .domain([0, d3.max(dHisto, function(d) { return d.length; })])
       .range([0, histoHeight])
