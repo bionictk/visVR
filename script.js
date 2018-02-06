@@ -1,4 +1,3 @@
-var d;
 AFRAME.registerComponent('barchart', {
   schema: {
     csv: {}
@@ -17,20 +16,24 @@ AFRAME.registerComponent('barchart', {
   },
 
   generate: function (data) {
-    var el = this.el;
+    var histoWidth = 2,
+        histoDepth = 2,
+        histoHeight = 1.5; //in meters
     // default alpha for bars
     var alpha = 0.6;
-    var scaleMap = data.map(function(d) {return d.value;});
+    
+    var el = this.el;
+    var dataHeightArray = data.map(function(d) {return d.value;});
 
     // Scale the height of our bars using d3's linear scale
     var hscale = d3.scaleLinear()
-      .domain([0, d3.max(scaleMap)])
-      .range([0, 3]);
+      .domain(d3.extent(dataHeightArray))
+      .range([0, histoHeight]);
 
-    var color = d3.scaleLinear().domain([0, d3.max(scaleMap)])
+    var color = d3.scaleLinear().domain(d3.extent(dataHeightArray))
       .interpolate(d3.interpolateHcl).range(['#ffb3ba', '#bae1ff']);
 
-    // Select the current enity object just like an svg
+    // Select the current entity object just like an svg
     var currentEntity = d3.select(el);
 
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
