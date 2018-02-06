@@ -1,12 +1,12 @@
 AFRAME.registerComponent('barchart', {
   schema: {
-    csv: {
-      default: {
-        key: ['A', 'B', 'C', 'D', 'E'],
-        value: [19, 80, 30, 15, 55]
-      }
-  }
-},
+    csv: {},
+    json: { default: {
+                key: ['A', 'B', 'C', 'D', 'E'],
+                value: [19, 80, 30, 15, 55]
+              }
+           }
+  },
   init: function () {
     var self = this;
     d3.csv(this.data.csv, function(data) {
@@ -14,9 +14,8 @@ AFRAME.registerComponent('barchart', {
     });
   },
 
-  generate: function (data) {
-    console.log(data)
-    var json = parsedJson || this.data.json;
+  generate: function (data2) {
+    var json = this.data.json;
     var el = this.el;
     // default alpha for bars
     var alpha = 0.6;
