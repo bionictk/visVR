@@ -43,12 +43,16 @@ AFRAME.registerComponent('barchart', {
     var dDataExtent = d3.extent(depthDataArray);
     var widthDataArray = data.map(function(d) { return d[chosen.wData]; });
     
-    var bins = {}
-    b=bins
+    var dHisto = d3.histogram()
+      .domain(zScale.domain())
+      .thresholds(zScale)
+      (depthDataArray)
+    b=dHisto
     xScale.domain(widthDataArray);
-    var hscale = d3.scaleLinear()
-      .domain([0, dDataExtent[1]])
-      .range([0, histoHeight]);
+    var yScale = d3.scaleBand()
+      .domain([0, d3.max(dHisto, function(d) { return d.length; })])
+      .range([0, histoHeight])
+      .paddingInner(histoPadding);
     zScale.domain(depthDataArray);
     
     var color = d3.scaleLinear().domain(dDataExtent)
@@ -62,6 +66,7 @@ AFRAME.registerComponent('barchart', {
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
     var bars = currentEntity.selectAll('a-box.bar').data(data);
     // we set attributes on our cubes to determine how they are rendered
+    var bins = {}
     bars.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
         const x = xScale(d[chosen.wData]);
@@ -70,7 +75,7 @@ AFRAME.registerComponent('barchart', {
         var wbin = bins[d[chosen.wData]];
         const z = zScale(d[chosen.dData]);
         if (!wbin[z]) wbin[z] = 0;
-        const y = wbin[z];
+        const y = yScale(wbin[z]) + blockHeight / 2;
         wbin[z] += 1
         return x + " " + y + " " + z   
       })
