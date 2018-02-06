@@ -24,7 +24,8 @@ AFRAME.registerComponent('barchart', {
     var histoWidth = 2.0,
         histoDepth = 2.0,
         histoHeight = 1.5,
-        histoPadding = 0.1; //in meters
+        blockHeight = 0.3;  //in meters
+    var histoPadding = 0.4;
     // default alpha for bars
     var alpha = 0.6;
     
@@ -65,7 +66,7 @@ AFRAME.registerComponent('barchart', {
         const z = 0
         return x + " " + y + " " + z   
       })
-      .attr('width', function(d) { return histoWidth / Object.keys(widthBins).length; })
+      .attr('width', function(d) { return xScale.bandwidth(); })
       .attr('depth', function(d) { return 0.5; })
       .attr('height', function(d) { return hscale(d[chosen.dData]); })
       .attr('opacity', alpha)
@@ -79,7 +80,7 @@ AFRAME.registerComponent('barchart', {
           .attr('align', 'center')
           .attr('position', function() { return "0 " + (histoHeight - hscale(d[chosen.dData]) / 2 + 0.2) + " 0"; } )
           .attr('scale', '0.5 0.5 0.5')
-          .attr('look-at', '[camera]')
+          // .attr('look-at', '[camera]') todo
           .attr('value', function() { return d[chosen.label] + "\n" + d[chosen.dData]; });
       })
       .on("mouseleave", function(d,i) {
