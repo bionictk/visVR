@@ -1,11 +1,6 @@
 AFRAME.registerComponent('barchart', {
   schema: {
-    csv: {},
-    json: { default: {
-                key: ['A', 'B', 'C', 'D', 'E'],
-                value: [19, 80, 30, 15, 55]
-              }
-           }
+    csv: {}
   },
   init: function () {
     var self = this;
@@ -14,13 +9,12 @@ AFRAME.registerComponent('barchart', {
     });
   },
 
-  generate: function (data2) {
-    var json = this.data.json;
+  generate: function (data) {
     var el = this.el;
     // default alpha for bars
     var alpha = 0.6;
-    var data = json.map(function(obj) {return obj.value;});
-    var dataText = json.map(function(obj) {return obj.key;});
+    // var data = json.map(function(obj) {return obj.value;});
+    // var dataText = json.map(function(obj) {return obj.key;});
     // Scale the height of our bars using d3's linear scale
     var hscale = d3.scaleLinear()
       .domain([0, d3.max(data)])
@@ -56,7 +50,7 @@ AFRAME.registerComponent('barchart', {
           .attr('align', 'center')
           .attr('position', `0 ${(hscale(d) / 2 + 0.5)} 0`)
           .attr('scale', '1 1 1')
-          .attr('value', `${dataText[i]}, ${d}`);
+          .attr('value', function(d, i) { return }`${dataText[i]}, ${d}`);
       })
       .on("mouseleave", function(d,i) {
         d3.select(this).transition().duration(1000)
