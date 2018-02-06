@@ -1,3 +1,5 @@
+var chosen = { hData: "width", wData: "make", dData: "
+}
 AFRAME.registerComponent('barchart', {
   schema: {
     csv: {}
@@ -21,14 +23,25 @@ AFRAME.registerComponent('barchart', {
     var chosen
     var histoWidth = 2,
         histoDepth = 2,
-        histoHeight = 1.5; //in meters
+        histoHeight = 1.5,
+        histoPadding = 0.1; //in meters
     // default alpha for bars
     var alpha = 0.6;
+    
+    var xScale = d3.scaleBand() 
+      .rangeRound([0, histoWidth])
+      .paddingInner(histoPadding);
+    
+    var zScale = d3.scaleBand() 
+      .rangeRound([0, -histoDepth])
+      .paddingInner(histoPadding);
     
     var el = this.el;
     var dataHeightArray = data.map(function(d) {return d[chosenHeightData];});
     console.log(d3.extent(dataHeightArray));
     // Scale the height of our bars using d3's linear scale
+    
+    xScale.domain(data.map(function(d) { return d[chosen.hData]; }));
     var hscale = d3.scaleLinear()
       .domain([0, d3.max(dataHeightArray)])
       .range([0, histoHeight]);
@@ -61,7 +74,7 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).append("a-text")
           .attr('color', color(d[chosenHeightData]))
           .attr('align', 'center')
-          .attr('position', function() { return "0 " + hscale(d[chosenHeightData])  + " 0"; } )
+          .attr('position', function() { return "0 " + hscale(d[chosenHeightData]) + " 0"; } )
           .attr('scale', '1 1 1')
           .attr('value', function() { return d.name; });
       })
