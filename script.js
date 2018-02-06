@@ -54,7 +54,7 @@ AFRAME.registerComponent('barchart', {
     var currentEntity = d3.select(el);
 
     console.log(currentEntity)
-    currentEntity.attr('position' , histoWidth / 2 + " 0 " + (-(histoDepth / 2 + 3)))
+    currentEntity.attr('position' , -histoWidth / 2 + " 0 " + (-(histoDepth / 2 + 1)))
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
     var bars = currentEntity.selectAll('a-box.bar').data(data);
     // we set attributes on our cubes to determine how they are rendered
