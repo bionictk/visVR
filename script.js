@@ -79,7 +79,7 @@ AFRAME.registerComponent('barchart', {
           .attr('align', 'center')
           .attr('position', function() { return "0 " + (histoHeight - hscale(d[chosen.dData]) / 2 + 0.2) + " 0"; } )
           .attr('scale', '0.5 0.5 0.5')
-          .attr('look-at', "[camera]")
+          .attr('look-at', '[camera]')
           .attr('value', function() { return d[chosen.label] + "\n" + d[chosen.dData]; });
       })
       .on("mouseleave", function(d,i) {
