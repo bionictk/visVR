@@ -7,8 +7,9 @@ AFRAME.registerComponent('barchart', {
     d3.dsv(",", this.data.csv, function(d) {
       return {
         name: d["Vehicle Name"],
+        make: name.replace(/ .*/,''),
         key: +d["Len"],
-        value: +d["Width"]
+        width: +d["Width"]
       };
     }).then(function(data) {
       self.generate(data);
@@ -16,6 +17,8 @@ AFRAME.registerComponent('barchart', {
   },
 
   generate: function (data) {
+    var chosenHeightData = "width"
+    var chosen
     var histoWidth = 2,
         histoDepth = 2,
         histoHeight = 1.5; //in meters
@@ -23,11 +26,11 @@ AFRAME.registerComponent('barchart', {
     var alpha = 0.6;
     
     var el = this.el;
-    var dataHeightArray = data.map(function(d) {return d.value;});
-
+    var dataHeightArray = data.map(function(d) {return d[chosenHeightData];});
+    console.log(d3.extent(dataHeightArray));
     // Scale the height of our bars using d3's linear scale
     var hscale = d3.scaleLinear()
-      .domain(d3.extent(dataHeightArray))
+      .domain([0, d3.max(dataHeightArray)])
       .range([0, histoHeight]);
 
     var color = d3.scaleLinear().domain(d3.extent(dataHeightArray))
@@ -42,23 +45,23 @@ AFRAME.registerComponent('barchart', {
     bars.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
         const x =  i * 0.8 - (data.length / 2);
-        const y = hscale(d.value)/2;
+        const y = hscale(d[chosenHeightData])/2;
         const z = 0
         return x + " " + y + " " + z   
       })
       .attr('width', function(d) { return 0.5; })
       .attr('depth', function(d) { return 0.5; })
-      .attr('height', function(d) { return hscale(d.value); })
+      .attr('height', function(d) { return hscale(d[chosenHeightData]); })
       .attr('opacity', alpha)
-      .attr('color', function(d) { return color(d.value); })
+      .attr('color', function(d) { return color(d[chosenHeightData]); })
       .on("mouseenter", function(d,i) {
         d3.select(this).transition().duration(10)
           .attr('opacity', 0.9);
 
         d3.select(this).append("a-text")
-          .attr('color', color(d.value))
+          .attr('color', color(d[chosenHeightData]))
           .attr('align', 'center')
-          .attr('position', function() { return "0 " + hscale(d.value) / 2 + 0.5 + " 0"; } )
+          .attr('position', function() { return "0 " + hscale(d[chosenHeightData])  + " 0"; } )
           .attr('scale', '1 1 1')
           .attr('value', function() { return d.name; });
       })
