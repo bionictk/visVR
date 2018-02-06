@@ -29,31 +29,32 @@ AFRAME.registerComponent('barchart', {
     var alpha = 0.6;
     
     var xScale = d3.scaleBand() 
-      .rangeRound([0, histoWidth])
+      .range([0, histoWidth])
       .paddingInner(histoPadding);
     
     var zScale = d3.scaleBand() 
-      .rangeRound([0, -histoDepth])
+      .range([0, -histoDepth])
       .paddingInner(histoPadding);
     
     var el = this.el;
     
     var dataHeightArray = data.map(function(d) {return d[chosen.dData];});
     var widthBins = {}
-    data.forEach(function(d) {widthBins[chosen.wData] = widthBins[chosen.wData
-    // Scale the height of our bars using d3's linear scale
-    
+    data.forEach(function(d) {widthBins[d[chosen.wData]] = widthBins[d[chosen.wData]] ? widthBins[d[chosen.wData]] + 1 : 1;});
+
     xScale.domain(data.map(function(d) { return d[chosen.wData]; }));
     var hscale = d3.scaleLinear()
       .domain([0, d3.max(dataHeightArray)])
       .range([0, histoHeight]);
-
+    
     var color = d3.scaleLinear().domain(d3.extent(dataHeightArray))
       .interpolate(d3.interpolateHcl).range(['#ffb3ba', '#bae1ff']);
 
     // Select the current entity object just like an svg
     var currentEntity = d3.select(el);
 
+    console.log(currentEntity)
+    currentEntity.attr('position' , histoWidth / 2 + " 0 " + (-(histoDepth / 2 + 3)))
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
     var bars = currentEntity.selectAll('a-box.bar').data(data);
     // we set attributes on our cubes to determine how they are rendered
