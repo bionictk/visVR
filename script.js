@@ -39,16 +39,24 @@ AFRAME.registerComponent('barchart', {
     
     var el = this.el;
     
-    var dataHeightArray = data.map(function(d) {return d[chosen.dData];});
-    var widthBins = {}
-    data.forEach(function(d) {widthBins[d[chosen.wData]] = widthBins[d[chosen.wData]] ? widthBins[d[chosen.wData]] + 1 : 1;});
+    var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
+    var dDataExtent = d3.extent(depthDataArray);
+    var widthDataArray = data.map(function(d) { return d[chosen.wData]; });
+    
+    var bins = {}
+    data.forEach(function(d) {
+      if (!bins[d[chosen.wData]]) bins[d[chosen.wData]] = {};
+      var wbin = bins[d[chosen.wData]];
+      
+      widthBins[d[chosen.wData]] = widthBins[d[chosen.wData]] ? widthBins[d[chosen.wData]] + 1 : 1;
+    });
 
-    xScale.domain(data.map(function(d) { return d[chosen.wData]; }));
+    xScale.domain();
     var hscale = d3.scaleLinear()
-      .domain([0, d3.max(dataHeightArray)])
+      .domain([0, dDataExtent[1]])
       .range([0, histoHeight]);
     
-    var color = d3.scaleLinear().domain(d3.extent(dataHeightArray))
+    var color = d3.scaleLinear().domain(dDataExtent)
       .interpolate(d3.interpolateHcl).range(['#ffb3ba', '#bae1ff']);
 
     // Select the current entity object just like an svg
@@ -61,14 +69,16 @@ AFRAME.registerComponent('barchart', {
     // we set attributes on our cubes to determine how they are rendered
     bars.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
-        const x = xScale(d[chosen.wData]);//i * 0.8 - (data.length / 2);
+        const x = xScale(d[chosen.wData]);
+        
+        if (!bins[d[chosen.wData]]) bins[d[chosen.wData]] = {};
         const y = hscale(d[chosen.dData])/2;
         const z = 0
         return x + " " + y + " " + z   
       })
       .attr('width', function(d) { return xScale.bandwidth(); })
       .attr('depth', function(d) { return 0.5; })
-      .attr('height', function(d) { return hscale(d[chosen.dData]); })
+      .attr('height', function(d) { return blockHeight; })
       .attr('opacity', alpha)
       .attr('color', function(d) { return color(d[chosen.dData]); })
       .on("mouseenter", function(d,i) {
