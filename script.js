@@ -1,5 +1,5 @@
 var chosen = { label: "name", hData: "", wData: "make", dData: "price" }
-
+var b;
 AFRAME.registerComponent('barchart', {
   schema: {
     csv: {}
@@ -44,17 +44,12 @@ AFRAME.registerComponent('barchart', {
     var widthDataArray = data.map(function(d) { return d[chosen.wData]; });
     
     var bins = {}
-    data.forEach(function(d) {
-      if (!bins[d[chosen.wData]]) bins[d[chosen.wData]] = {};
-      var wbin = bins[d[chosen.wData]];
-      
-      widthBins[d[chosen.wData]] = widthBins[d[chosen.wData]] ? widthBins[d[chosen.wData]] + 1 : 1;
-    });
-
-    xScale.domain();
+    b=bins
+    xScale.domain(widthDataArray);
     var hscale = d3.scaleLinear()
       .domain([0, dDataExtent[1]])
       .range([0, histoHeight]);
+    zScale.domain(depthDataArray);
     
     var color = d3.scaleLinear().domain(dDataExtent)
       .interpolate(d3.interpolateHcl).range(['#ffb3ba', '#bae1ff']);
@@ -72,8 +67,11 @@ AFRAME.registerComponent('barchart', {
         const x = xScale(d[chosen.wData]);
         
         if (!bins[d[chosen.wData]]) bins[d[chosen.wData]] = {};
-        const y = hscale(d[chosen.dData])/2;
-        const z = 0
+        var wbin = bins[d[chosen.wData]];
+        const z = zScale(d[chosen.dData]);
+        if (!wbin[z]) wbin[z] = 0;
+        const y = wbin[z];
+        wbin[z] += 1
         return x + " " + y + " " + z   
       })
       .attr('width', function(d) { return xScale.bandwidth(); })
@@ -88,7 +86,7 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).append("a-text")
           .attr('color', color(d[chosen.dData]))
           .attr('align', 'center')
-          .attr('position', function() { return "0 " + (histoHeight - hscale(d[chosen.dData]) / 2 + 0.2) + " 0"; } )
+          .attr('position', function() { return "0 " + 0.5 + " 0"; } )
           .attr('scale', '0.5 0.5 0.5')
           // .attr('look-at', '[camera]') todo
           .attr('value', function() { return d[chosen.label] + "\n" + d[chosen.dData]; });
