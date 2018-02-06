@@ -33,9 +33,9 @@ AFRAME.registerComponent('barchart', {
       .range([0, histoWidth])
       .paddingInner(histoPadding);
     
-    var zScale = d3.scaleBand() 
+    var zScale = d3.scaleLinear() 
       .range([0, -histoDepth])
-      .paddingInner(histoPadding);
+      // .paddingInner(histoPadding);
     
     var el = this.el;
     
@@ -45,7 +45,7 @@ AFRAME.registerComponent('barchart', {
     
     var dHisto = d3.histogram()
       .domain(zScale.domain())
-      .thresholds(zScale)
+      .thresholds(zScale.ticks(20))
       (depthDataArray)
     b=dHisto
     xScale.domain(widthDataArray);
