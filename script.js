@@ -1,5 +1,5 @@
 var chosen = { label: "name", hData: "", wData: "make", dData: "price" }
-var b;
+var d3 = d3;
 AFRAME.registerComponent('barchart', {
   schema: {
     csv: {}
@@ -21,13 +21,15 @@ AFRAME.registerComponent('barchart', {
 
   generate: function (data) {
 
-    var histoWidth = 2.0,
-        histoDepth = 2.0,
-        histoHeight = 1.5,
-        blockHeight = 0.3;  //in meters
+    var histoWidth = 4.0,
+        histoDepth = 4.0,
+        histoHeight = 1.5; //in meters
     var histoPadding = 0.4;
     // default alpha for bars
     var alpha = 0.6;
+    
+    var blockDepth = histoDepth / histoWidth,
+        blockHeight = histoHeight / histoWidth;
     
     var xScale = d3.scaleBand() 
       .range([0, histoWidth])
@@ -36,7 +38,7 @@ AFRAME.registerComponent('barchart', {
     var zScale = d3.scaleLinear() 
       .range([0, -histoDepth])
       // .paddingInner(histoPadding);
-    
+
     var el = this.el;
     
     var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
@@ -44,17 +46,17 @@ AFRAME.registerComponent('barchart', {
     var widthDataArray = data.map(function(d) { return d[chosen.wData]; });
     
     xScale.domain(widthDataArray);
-    zScale.domain(depthDataArray);
+    zScale.domain(dDataExtent);
     
     var dHisto = d3.histogram()
-      .domain(zScale.domain(depthDataArray))
       .thresholds(zScale.ticks(20))
       (depthDataArray);
+    
     var yScale = d3.scaleBand()
       .domain([0, d3.max(dHisto, function(d) { return d.length; })])
       .range([0, histoHeight])
       .paddingInner(histoPadding);
-  console.log(dHisto)
+
     var color = d3.scaleLinear().domain(dDataExtent)
       .interpolate(d3.interpolateHcl).range(['#ffb3ba', '#bae1ff']);
 
@@ -79,8 +81,8 @@ AFRAME.registerComponent('barchart', {
         return x + " " + y + " " + z   
       })
       .attr('width', function(d) { return xScale.bandwidth(); })
-      .attr('depth', function(d) { return 0.5; })
-      .attr('height', function(d) { return blockHeight; })
+      .attr('depth', function(d) { return xScale.bandwidth() * blockDepth; })
+      .attr('height', function(d) { return xScale.bandwidth() * blockHeight; })
       .attr('opacity', alpha)
       .attr('color', function(d) { return color(d[chosen.dData]); })
       .on("mouseenter", function(d,i) {
@@ -90,7 +92,7 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).append("a-text")
           .attr('color', color(d[chosen.dData]))
           .attr('align', 'center')
-          .attr('position', function() { return "0 " + 0.5 + " 0"; } )
+          .attr('position', function() { return "0 " + 0 + " 0"; } )
           .attr('scale', '0.5 0.5 0.5')
           // .attr('look-at', '[camera]') todo
           .attr('value', function() { return d[chosen.label] + "\n" + d[chosen.dData]; });
@@ -101,5 +103,6 @@ AFRAME.registerComponent('barchart', {
 
         d3.select(this).select("a-text").remove();
       })
+    console.log(bins)
   }
 });
