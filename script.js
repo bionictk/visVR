@@ -1,4 +1,4 @@
-var chosen = { hData: "", wData: "make", dData: "price" }
+var chosen = { label: "name", hData: "", wData: "make", dData: "price" }
 
 AFRAME.registerComponent('barchart', {
   schema: {
@@ -75,9 +75,9 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).append("a-text")
           .attr('color', color(d[chosen.dData]))
           .attr('align', 'center')
-          .attr('position', function() { return "0 " + histoHeight + " 0"; } )
+          .attr('position', function() { return "0 " + histoHeight / 2 + " 0"; } )
           .attr('scale', '1 1 1')
-          .attr('value', function() { return d.name; });
+          .attr('value', function() { return d[chosen.label] + "\n" + d[chosen.dData]; });
       })
       .on("mouseleave", function(d,i) {
         d3.select(this).transition().duration(1000)
