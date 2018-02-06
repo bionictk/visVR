@@ -46,13 +46,14 @@ AFRAME.registerComponent('barchart', {
     var dHisto = d3.histogram()
       .domain(zScale.domain())
       .thresholds(zScale.ticks(20))
-      (depthDataArray)
-    b=dHisto
+      (depthDataArray);
+    console.log(dHisto)
     xScale.domain(widthDataArray);
     var yScale = d3.scaleBand()
       .domain([0, d3.max(dHisto, function(d) { return d.length; })])
       .range([0, histoHeight])
       .paddingInner(histoPadding);
+    
     zScale.domain(depthDataArray);
     
     var color = d3.scaleLinear().domain(dDataExtent)
@@ -60,8 +61,6 @@ AFRAME.registerComponent('barchart', {
 
     // Select the current entity object just like an svg
     var currentEntity = d3.select(el);
-
-    console.log(currentEntity)
     currentEntity.attr('position' , -histoWidth / 2 + " 0 " + (-(histoDepth / 2 + 1)))
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
     var bars = currentEntity.selectAll('a-box.bar').data(data);
@@ -73,6 +72,7 @@ AFRAME.registerComponent('barchart', {
         
         if (!bins[d[chosen.wData]]) bins[d[chosen.wData]] = {};
         var wbin = bins[d[chosen.wData]];
+
         const z = zScale(d[chosen.dData]);
         if (!wbin[z]) wbin[z] = 0;
         const y = yScale(wbin[z]) + blockHeight / 2;
