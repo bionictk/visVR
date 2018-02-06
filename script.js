@@ -20,10 +20,9 @@ AFRAME.registerComponent('barchart', {
   },
 
   generate: function (data) {
-    console.log(data)
 
-    var histoWidth = 2,
-        histoDepth = 2,
+    var histoWidth = 2.0,
+        histoDepth = 2.0,
         histoHeight = 1.5,
         histoPadding = 0.1; //in meters
     // default alpha for bars
@@ -38,11 +37,13 @@ AFRAME.registerComponent('barchart', {
       .paddingInner(histoPadding);
     
     var el = this.el;
+    
     var dataHeightArray = data.map(function(d) {return d[chosen.dData];});
-    console.log(d3.extent(dataHeightArray));
+    var widthBins = {}
+    data.forEach(function(d) {widthBins[chosen.wData] = widthBins[chosen.wData
     // Scale the height of our bars using d3's linear scale
     
-    xScale.domain(data.map(function(d) { return d[chosen.dData]; }));
+    xScale.domain(data.map(function(d) { return d[chosen.wData]; }));
     var hscale = d3.scaleLinear()
       .domain([0, d3.max(dataHeightArray)])
       .range([0, histoHeight]);
@@ -58,12 +59,12 @@ AFRAME.registerComponent('barchart', {
     // we set attributes on our cubes to determine how they are rendered
     bars.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
-        const x =  i * 0.8 - (data.length / 2);
+        const x = xScale(d[chosen.wData]);//i * 0.8 - (data.length / 2);
         const y = hscale(d[chosen.dData])/2;
         const z = 0
         return x + " " + y + " " + z   
       })
-      .attr('width', function(d) { return 0.5; })
+      .attr('width', function(d) { return histoWidth / Object.keys(widthBins).length; })
       .attr('depth', function(d) { return 0.5; })
       .attr('height', function(d) { return hscale(d[chosen.dData]); })
       .attr('opacity', alpha)
@@ -75,7 +76,7 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).append("a-text")
           .attr('color', color(d[chosen.dData]))
           .attr('align', 'center')
-          .attr('position', function() { return "0 " + histoHeight / 2 + " 0"; } )
+          .attr('position', function() { return "0 " + (histoHeight - hscale(d[chosen.dData]) / 2 + 0.2) + " 0"; } )
           .attr('scale', '1 1 1')
           .attr('value', function() { return d[chosen.label] + "\n" + d[chosen.dData]; });
       })
