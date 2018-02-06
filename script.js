@@ -43,19 +43,18 @@ AFRAME.registerComponent('barchart', {
     var dDataExtent = d3.extent(depthDataArray);
     var widthDataArray = data.map(function(d) { return d[chosen.wData]; });
     
+    xScale.domain(widthDataArray);
+    zScale.domain(depthDataArray);
+    
     var dHisto = d3.histogram()
-      .domain(zScale.domain())
+      .domain(zScale.domain(depthDataArray))
       .thresholds(zScale.ticks(20))
       (depthDataArray);
-    console.log(dHisto)
-    xScale.domain(widthDataArray);
     var yScale = d3.scaleBand()
       .domain([0, d3.max(dHisto, function(d) { return d.length; })])
       .range([0, histoHeight])
       .paddingInner(histoPadding);
-    
-    zScale.domain(depthDataArray);
-    
+  console.log(dHisto)
     var color = d3.scaleLinear().domain(dDataExtent)
       .interpolate(d3.interpolateHcl).range(['#ffb3ba', '#bae1ff']);
 
