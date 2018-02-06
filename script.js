@@ -38,11 +38,11 @@ AFRAME.registerComponent('barchart', {
     // we set attributes on our cubes to determine how they are rendered
     bars.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
-      const x =  i * 0.8 - (data.length / 2);
-      const y = hscale(d.value)/2;
-      const z = -3
-      return x + " " + y + " " + z   
-    })
+        const x =  i * 0.8 - (data.length / 2);
+        const y = hscale(d.value)/2;
+        const z = 0
+        return x + " " + y + " " + z   
+      })
       .attr('width', function(d) { return 0.5; })
       .attr('depth', function(d) { return 0.5; })
       .attr('height', function(d) { return hscale(d.value); })
@@ -57,7 +57,7 @@ AFRAME.registerComponent('barchart', {
           .attr('align', 'center')
           .attr('position', function() { return "0 " + hscale(d.value) / 2 + 0.5 + " 0"; } )
           .attr('scale', '1 1 1')
-          .attr('value', function(d) { return d.name; });
+          .attr('value', function() { return d.name; });
       })
       .on("mouseleave", function(d,i) {
         d3.select(this).transition().duration(1000)
