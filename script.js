@@ -25,6 +25,8 @@ AFRAME.registerComponent('barchart', {
         histoDepth = 4.0,
         histoHeight = 1.5; //in meters
     var histoPadding = 0.4;
+    
+    var depthBinNum = 20;
     // default alpha for bars
     var alpha = 0.6;
     
@@ -36,9 +38,9 @@ AFRAME.registerComponent('barchart', {
       .paddingInner(histoPadding);
     
     var zScale = d3.scaleLinear() 
-      .range([0, -histoDepth])
-      // .paddingInner(histoPadding);
-
+      .range([0, -histoDepth]);
+    
+    var zScaleTicks = zScale.ticks(depthBinNum);
     var el = this.el;
     
     var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
@@ -49,7 +51,7 @@ AFRAME.registerComponent('barchart', {
     zScale.domain(dDataExtent);
     
     var dHisto = d3.histogram()
-      .thresholds(zScale.ticks(20))
+      .thresholds(zScaleTicks)
       (depthDataArray);
     
     var yScale = d3.scaleBand()
@@ -73,8 +75,8 @@ AFRAME.registerComponent('barchart', {
         
         if (!bins[d[chosen.wData]]) bins[d[chosen.wData]] = {};
         var wbin = bins[d[chosen.wData]];
-
-        const z = zScale(d[chosen.dData]);
+        dbin = getBin(d[chosen.dData]);
+        const z = zScale(dbin.x0);
         if (!wbin[z]) wbin[z] = 0;
         const y = yScale(wbin[z]) + blockHeight / 2;
         wbin[z] += 1
