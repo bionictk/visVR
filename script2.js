@@ -55,7 +55,7 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).append("a-text")
           .attr('color', color(d.value))
           .attr('align', 'center')
-          .attr('position', function() { return "0 " + hscale(d.value) / 2 + 0.5 + " 0"; } )
+          .attr('position', function(d) { return hscale(d.value) / 2 + 0.5; } )
           .attr('scale', '1 1 1')
           .attr('value', function(d) { return d.name; });
       })
