@@ -10,10 +10,22 @@
   <body>
     <a-scene>
       <a-assets>
-        <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg" crossorigin>
-      </a-assets> -->
+        <img id="skymap" src="https://cdn.glitch.com/debf1c79-d24f-44f7-9024-902b01f31b98%2Fsky.jpg?1517879532002" crossorigin="anonymous">
+        <img id="floor" src="https://cdn.glitch.com/debf1c79-d24f-44f7-9024-902b01f31b98%2Ffloor.jpg?1517879510874" crossorigin="anonymous">
+      </a-assets>
+
+      <a-entity id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
+      <a-entity id="ground"
+                geometry="primitive: box; width: 12; height: 0.01; depth: 12"
+                material="shader: flat; src: #floor">
+      </a-entity>
       
-      <a-entity position="-1 2 0" rotation="0 0 0">
+      <a-light type="point" light="color: #fff; intensity:0.6" position="3 10 1"></a-light>
+      <a-light type="point" light="color: #fff; intensity:0.2" position="-3 -10 0"></a-light>
+      <a-light type="hemisphere" groundcolor="#888" intensity="0.8"></a-light>
+
+<!--       <a-entity position="-1 2 0" rotation="0 0 0"> -->
+      <a-entity id="cameraRig">
         <a-entity camera look-controls wasd-controls>
           <a-entity cursor="fuse: true; fuseTimeout: 500"
                     position="0 0 -2"
@@ -21,11 +33,18 @@
                     material="color: black; shader: flat">
           </a-entity>
     	  </a-entity>
+        
+        <!-- Hands -->
+        <a-entity hand-controls="left" aabb-collider="objects: .cube;" grab></a-entity>
+        <a-entity hand-controls="right" aabb-collider="objects: .cube;" grab></a-entity>
+      
       </a-entity>
-      <a-entity text="font: mozillavr; value: 104 Taiwan Demographics (age, population) ; color: #DADADA; width: 6"
-                  position="-2 4 -3"></a-entity>
+      
+      
       <a-entity barchart="json: https://cdn.rawgit.com/ArvinH/f47671a9ff33b6719b043945d36054ac/raw/09a6ea23ee40d4a83205eef6d4fd4e5efa072c2b/104life.json"></a-entity>
-      <a-cylinder id="ground" src="#groundTexture" radius="32" height="0.1"></a-cylinder>
+      
+      
+      
     </a-scene>
   </body>
 </html>
