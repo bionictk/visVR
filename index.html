@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hello!</title>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/styles.css">
-    <script src="/script.js" defer></script>
+    <style>html,body{background-color:#030404}</style>
+    <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="script.js"></script>
   </head>
   <body>
-    <h1>Hi there!</h1>
-    <p>
-      I'm your cool new webpage. Made with 
-      <a href="https://www.glitch.com">Glitch</a>
-    </p>
+    <a-scene>
+      <a-assets>
+        <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg" crossorigin>
+      </a-assets> -->
+      
+      <a-entity position="-1 2 0" rotation="0 0 0">
+        <a-entity camera look-controls wasd-controls>
+          <a-entity cursor="fuse: true; fuseTimeout: 500"
+                    position="0 0 -2"
+                    geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.027"
+                    material="color: black; shader: flat">
+          </a-entity>
+    	  </a-entity>
+      </a-entity>
+      <a-entity text="font: mozillavr; value: 104 Taiwan Demographics (age, population) ; color: #DADADA; width: 6"
+                  position="-2 4 -3"></a-entity>
+      <a-entity barchart="json: https://cdn.rawgit.com/ArvinH/f47671a9ff33b6719b043945d36054ac/raw/09a6ea23ee40d4a83205eef6d4fd4e5efa072c2b/104life.json"></a-entity>
+      <a-cylinder id="ground" src="#groundTexture" radius="32" height="0.1"></a-cylinder>
+    </a-scene>
   </body>
 </html>
