@@ -82,12 +82,13 @@ AFRAME.registerComponent('barchart', {
       .interpolate(d3.interpolateHcl).range(['#77ffd1', '#e0282b']);
 
     // Select the current entity object just like an svg
-    var currentEntity = d3.select(el);
-    d3.select(el.parentNode).attr('position' , "0 -0.002 -3");
-    d3.select(el).attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
-    d3.select(el.parentNode).attr('geometry' , "width: " + (histoWidth + 0.5) + "; height: 0.006; depth: " + (histoDepth + 0.5));
+    var chartEntity = d3.select(el);
+    var chartHolderEntity = d3.select(el.parentNode);
+    chartHolderEntity.attr('position' , "0 -0.002 -3");
+    chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
+    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 0.5) + "; height: 0.006; depth: " + (histoDepth + 0.5));
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
-    var bars = currentEntity.selectAll('a-box.bar').data(data);
+    var bars = chartEntity.selectAll('a-box.bar').data(data);
     // we set attributes on our cubes to determine how they are rendered
 
     bars.enter().append('a-box').classed('bar', true)
@@ -124,6 +125,7 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).select("a-text").remove();
       })
     
+      var axes = chartEntity.append('g').classed('axes')
     // add x-axis
     // x - lines
     // d3.select(this).append("a-box")
