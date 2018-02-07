@@ -17,11 +17,12 @@
       <a-entity id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
       <a-entity id="ground"
                 geometry="primitive: box; width: 15; height: 0.01; depth: 15"
-                shadow="receive: true" -->
+                material="shader: flat; src: #floor; repeat: 50 50"
+                shadow="receive: true"
       </a-entity>
-      
-      <a-light type="point" light="color: #fff; intensity:0.6 castShadow: true;" position="3 10 1"></a-light>
-      <a-entity light="type: directional; color: #fff; intensity:0.4; castShadow: true;" position="-3 5 0"></a-entity>
+
+<!--       <a-light type="point" light="color: #fff; intensity:0.6 castShadow: true;" position="3 10 1"></a-light> -->
+<!--       <a-entity light="type: directional; color: #fff; intensity:0.4; castShadow: true;" position="-3 5 0"></a-entity> -->
 <!--       <a-light type="hemisphere" groundcolor="#888" intensity="0.5"></a-light> -->
 
 <!--       <a-entity position="-1 2 0" rotation="0 0 0"> -->
@@ -39,7 +40,10 @@
         <a-entity hand-controls="right" aabb-collider="objects: .cube;" grab></a-entity>
       
       </a-entity>
-      
+      <a-entity geometry="primitive: box; width: 15; height: 0.01; depth: 15"
+                material="shader: flat; color: #227"
+                shadow="receive: true"
+      </a-entity>
       <a-entity barchart="csv: car.csv" position="0 0 -3"></a-entity>
       
     </a-scene>
