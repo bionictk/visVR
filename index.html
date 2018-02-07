@@ -19,6 +19,7 @@
                 geometry="primitive: box; width: 15; height: 0.01; depth: 15"
                 material="shader: flat; src: #floor; repeat: 50 50"
                 shadow="receive: true"
+                position= "0 -0.005 0">
       </a-entity>
 
 <!--       <a-light type="point" light="color: #fff; intensity:0.6 castShadow: true;" position="3 10 1"></a-light> -->
@@ -40,11 +41,12 @@
         <a-entity hand-controls="right" aabb-collider="objects: .cube;" grab></a-entity>
       
       </a-entity>
-      <a-entity geometry="primitive: box; width: 15; height: 0.01; depth: 15"
+      <a-box geometry="width: 1; height: 0.006; depth: 1"
                 material="shader: flat; color: #227"
                 shadow="receive: true"
+                position="0 -0.002 0">
+        <a-entity barchart="csv: car.csv" position="0 0 0"></a-entity>
       </a-entity>
-      <a-entity barchart="csv: car.csv" position="0 0 -3"></a-entity>
       
     </a-scene>
   </body>

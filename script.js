@@ -83,7 +83,9 @@ AFRAME.registerComponent('barchart', {
 
     // Select the current entity object just like an svg
     var currentEntity = d3.select(el);
-    currentEntity.attr('position' , -histoWidth / 2 + " 0 " + (-(histoDepth / 2 + 1)))
+    // d3.select(el.parentNode).attr('position' , -histoWidth / 2 + " -0.002 " + (-(histoDepth / 2 + 1)))
+    d3.select(el.parentNode).attr('position' , -histoWidth / 2 + " -0.002 " + (-(histoDepth / 2 + 1)))
+    d3.select(el.parentNode).attr('geometry' , "width: " + (histoWidth + 0.5) + "; height: 0.006; depth: " + (histoDepth + 0.5));
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
     var bars = currentEntity.selectAll('a-box.bar').data(data);
     // we set attributes on our cubes to determine how they are rendered
