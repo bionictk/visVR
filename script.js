@@ -125,7 +125,7 @@ AFRAME.registerComponent('barchart', {
       })
     
     // add x-axis
-    // lines
+    // x - lines
     // d3.select(this).append("a-box")
     //       .attr('color', "#FFF"))
     //       .attr('position', function() { return "0 " + 0 + " 0"; } )
