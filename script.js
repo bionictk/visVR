@@ -95,13 +95,14 @@ AFRAME.registerComponent('barchart', {
         const dbin = getBin(d[chosen.dData]);
         const z = zScale(dbin.x0);
         const y = yScale(bins[d[chosen.wData]][dbin.i]) + (xScale.bandwidth() * blockHeight / 2);
+      console.log(yScale(0))
         bins[d[chosen.wData]][dbin.i] -= 1;
         return x + " " + y + " " + z   
       })
       .attr('width', function(d) { return xScale.bandwidth(); })
       .attr('depth', function(d) { return xScale.bandwidth() * blockDepth; })
       .attr('height', function(d) { return histoHeight / maxBinHeight - 0.01; })
-      .attr('opacity', alpha)
+      // .attr('opacity', alpha)
       .attr('color', function(d) { return color(d[chosen.dData]); })
       .attr('shadow', "cast: true")
       .on("mouseenter", function(d,i) {
@@ -117,8 +118,7 @@ AFRAME.registerComponent('barchart', {
           .attr('value', function() { return d[chosen.label] + "\n" + d[chosen.dData]; });
       })
       .on("mouseleave", function(d,i) {
-        d3.select(this).transition().duration(1000)
-          .attr('opacity', alpha);
+        // d3.select(this).transition().duration(1000).attr('opacity', alpha);
 
         d3.select(this).select("a-text").remove();
       })
@@ -132,13 +132,20 @@ AFRAME.registerComponent('barchart', {
       .attr('position', function(d, i) { return (xScale(d)) +" 0 0"; })
       .attr('rotation', '-90 90 0')
       .attr('scale', '0.5 0.5 0.5')
-      .attr('value', function(d) { return d; });
-    var xLine = xAxis.append("a-box")
-      .attr('width', histoWidth)
-      .attr('depth', 0.00)
+      .attr('value', function(d) { return d; })
+    var xLines = xAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(xScale.domain());
+    xLines.enter().append("a-box")
+      .attr('width', 0.005)
+      .attr('depth', histoDepth)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', '0 0 0')
+      .attr('position', function(d) {return (xScale(d) + xScale.bandwidth()) + ' 0 ' + (-histoDepth / 2);});
+    var xLine = xAxis.append("a-box")
+      .attr('width', 0.005)
+      .attr('depth', histoDepth)
+      .attr('height', 0.002)
+      .attr('color', '#FFF')
+      .attr('position', (histoWidth / 2) + ' 0 0')
 
     // add x-axis
     // x - lines
