@@ -123,13 +123,17 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).select("a-text").remove();
       })
     
-    var xAxis = chartEntity.select("#x-axis");
-    var xLabels = xAxis.append("a-entity").classed("labels").selectAll("a-text.axis").data(xScale.domain());
-    xLabels.enter().append("a-text").classed("axis")
+    d3.select("#axes").attr('position', 
+    var xAxis = d3.select("#x-axis");
+    var xLabels = xAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(xScale.domain());
+    xLabels.enter().append("a-text").classed("axis", true)
       .attr('color', '#FFF')
       .attr('align', 'center')
-      .attr('position', function(d)            
-    console.log(xScale.domain())
+      .attr('position', function(d, i) { console.log(d);return "0 0.005 0"; })
+      .attr('rotation', '-90 0 0')
+      .attr('scale', '1 1 1')
+      .attr('value', function(d) { return d; });
+
     // add x-axis
     // x - lines
     // d3.select(this).append("a-box")
