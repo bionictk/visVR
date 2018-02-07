@@ -46,9 +46,9 @@ AFRAME.registerComponent('barchart', {
     var widthDataArray = data.map(function(d) { return d[chosen.wData]; });
     
     xScale.domain(widthDataArray);
-    zScale.domain(dDataExtent);
-    var zScaleTicks = zScale.ticks(depthBinNum);
-        
+    zScale.domain(dDataExtent).ticks(depthBinNum);
+    var zScaleTicks = zScale.ticks();
+    console.log(zScaleTicks)
     var getBin = function(d) {
       var i;
       for (i = 0; i < zScaleTicks.length; i++) {
@@ -139,13 +139,13 @@ AFRAME.registerComponent('barchart', {
       .attr('depth', histoDepth)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (xScale(d) + (xScale.bandwidth() / 2) + ' 0 ' + (-histoDepth / 2);});
+      .attr('position', function(d) {return (xScale(d) + (xScale.step()) / 2) + ' 0 ' + (-histoDepth / 2);});
     var xAxisLine = xAxis.append("a-box")
       .attr('width', 0.005)
       .attr('depth', histoDepth)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', (xScale.bandwidth() / -2) + ' 0 ' + (-histoDepth / 2));
+      .attr('position', (xScale.step() / -2) + ' 0 ' + (-histoDepth / 2));
 
     // add x-axis
     // x - lines
