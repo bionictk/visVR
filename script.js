@@ -125,6 +125,20 @@ AFRAME.registerComponent('barchart', {
       })
     
     // add x-axis
+    // lines
+    // d3.select(this).append("a-box")
+    //       .attr('color', "#FFF"))
+    //       .attr('position', function() { return "0 " + 0 + " 0"; } )
+    //       .attr('rotation', '-45 0 0')
+    //       .attr('scale', function() { return '3 0.5 0.5';} )
+    // labels
+    // d3.select(this).append("a-text")
+    //       .attr('color', "#FFF"))
+    //       .attr('align', 'center')
+    //       .attr('position', function() { return "0 " + 0 + " 0"; } )
+    //       .attr('scale', '0.5 0.5 0.5')
+    //       .attr('rotation', '-45 0 0')
+    //       .attr('value', function() { return d[chosen.wData]; });
     // add y-axis
   }
 });
