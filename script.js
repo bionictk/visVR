@@ -48,7 +48,7 @@ AFRAME.registerComponent('barchart', {
     xScale.domain(widthDataArray);
     zScale.domain(dDataExtent).ticks(depthBinNum);
     var zScaleTicks = zScale.ticks();
-    console.log(zScaleTicks)
+    console.log(dDataExtent)
     var getBin = function(d) {
       var i;
       for (i = 0; i < zScaleTicks.length; i++) {
