@@ -125,7 +125,7 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).select("a-text").remove();
       })
     
-      var axes = chartEntity.append('g').classed('axes')
+      var xAxis = chartEntity.select("#x-axis");
     // add x-axis
     // x - lines
     // d3.select(this).append("a-box")
