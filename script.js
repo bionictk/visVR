@@ -86,7 +86,7 @@ AFRAME.registerComponent('barchart', {
     var chartHolderEntity = d3.select(el.parentNode);
     chartHolderEntity.attr('position' , "0 -0.002 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
-    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 0.5) + "; height: 0.006; depth: " + (histoDepth + 1));
+    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1) + "; height: 0.006; depth: " + (histoDepth + 1));
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
     var bars = chartEntity.selectAll('a-box.bar').data(data);
     bars.enter().append('a-box').classed('bar', true)
@@ -133,6 +133,12 @@ AFRAME.registerComponent('barchart', {
       .attr('rotation', '-90 90 0')
       .attr('scale', '0.5 0.5 0.5')
       .attr('value', function(d) { return d; });
+    var xLine = xAxis.append("a-box")
+      .attr('width', histoWidth)
+      .attr('depth', 0.00)
+      .attr('height', 0.002)
+      .attr('color', '#FFF')
+      .attr('position', '0 0 0')
 
     // add x-axis
     // x - lines
