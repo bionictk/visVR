@@ -30,8 +30,7 @@ AFRAME.registerComponent('barchart', {
     // default alpha for bars
     var alpha = 0.6;
     
-    var blockDepth = histoDepth / histoWidth,
-        blockHeight = histoHeight / histoWidth;
+    var blockDepth = histoDepth / histoWidth;
     
     var xScale = d3.scaleBand() 
       .range([0, histoWidth])
@@ -81,10 +80,11 @@ AFRAME.registerComponent('barchart', {
     var color = d3.scaleLinear().domain(dDataExtent)
       .interpolate(d3.interpolateHcl).range(['#77ffd1', '#e0282b']);
 
+    var blockHeight = histoHeight / maxBinHeight - 0.01;
     // Select the current entity object just like an svg
     var chartEntity = d3.select(el);
     var chartHolderEntity = d3.select(el.parentNode);
-    chartHolderEntity.attr('position' , "0 -0.002 -3");
+    chartHolderEntity.attr('position' , "0 0 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
     chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1) + "; height: 0.006; depth: " + (histoDepth + 1));
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
@@ -94,20 +94,20 @@ AFRAME.registerComponent('barchart', {
         const x = xScale(d[chosen.wData]);
         const dbin = getBin(d[chosen.dData]);
         const z = zScale(dbin.x0);
-        const y = yScale(bins[d[chosen.wData]][dbin.i]) + (xScale.bandwidth() * blockHeight / 2);
-      console.log(yScale(0))
-        bins[d[chosen.wData]][dbin.i] -= 1;
+        bins[d[chosen.wData]][dbin.i] -= 1
+        var hval = bins[d[chosen.wData]][dbin.i]
+        const y = (yScale(hval)) + blockHeight / 2;        
         return x + " " + y + " " + z   
       })
       .attr('width', function(d) { return xScale.bandwidth(); })
       .attr('depth', function(d) { return xScale.bandwidth() * blockDepth; })
-      .attr('height', function(d) { return histoHeight / maxBinHeight - 0.01; })
+      .attr('height', blockHeight)
       // .attr('opacity', alpha)
       .attr('color', function(d) { return color(d[chosen.dData]); })
       .attr('shadow', "cast: true")
       .on("mouseenter", function(d,i) {
         d3.select(this).transition().duration(10)
-          .attr('opacity', 0.9);
+          // .attr('opacity', 0.9);
 
         d3.select(this).append("a-text")
           .attr('color', color(d[chosen.dData]))
@@ -139,13 +139,13 @@ AFRAME.registerComponent('barchart', {
       .attr('depth', histoDepth)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (xScale(d) + xScale.bandwidth()) + ' 0 ' + (-histoDepth / 2);});
-    var xLine = xAxis.append("a-box")
+      .attr('position', function(d) {return (xScale(d) + (xScale.bandwidth() / 2) + ' 0 ' + (-histoDepth / 2);});
+    var xAxisLine = xAxis.append("a-box")
       .attr('width', 0.005)
       .attr('depth', histoDepth)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', (histoWidth / 2) + ' 0 0')
+      .attr('position', (xScale.bandwidth() / -2) + ' 0 ' + (-histoDepth / 2));
 
     // add x-axis
     // x - lines
