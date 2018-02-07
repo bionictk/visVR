@@ -1,5 +1,5 @@
 var chosen = { label: "name", hData: "", wData: "make", dData: "price" }
-var d3 = d3;
+var d3 = d3, AFRAME = AFRAME;
 AFRAME.registerComponent('barchart', {
   schema: {
     csv: {}
@@ -89,8 +89,6 @@ AFRAME.registerComponent('barchart', {
     chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 0.5) + "; height: 0.006; depth: " + (histoDepth + 0.5));
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
     var bars = chartEntity.selectAll('a-box.bar').data(data);
-    // we set attributes on our cubes to determine how they are rendered
-
     bars.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
         const x = xScale(d[chosen.wData]);
@@ -125,7 +123,13 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).select("a-text").remove();
       })
     
-      var xAxis = chartEntity.select("#x-axis");
+    var xAxis = chartEntity.select("#x-axis");
+    var xLabels = xAxis.append("a-entity").classed("labels").selectAll("a-text.axis").data(xScale.domain());
+    xLabels.enter().append("a-text").classed("axis")
+      .attr('color', '#FFF')
+      .attr('align', 'center')
+      .attr('position', function(d)            
+    console.log(xScale.domain())
     // add x-axis
     // x - lines
     // d3.select(this).append("a-box")
