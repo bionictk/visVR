@@ -55,7 +55,7 @@ AFRAME.registerComponent('barchart', {
       for (i = 0; i < zScaleTicks.length; i++) {
         if (d < zScaleTicks[i]) break;
       }
-      return {index: i, x0: zScaleTicks[i]};
+      return {i: i, x0: zScaleTicks[i]};
     }
     
     var bins = {}
@@ -66,18 +66,17 @@ AFRAME.registerComponent('barchart', {
       var dbin = getBin(d[chosen.dData]);
       const z = zScale(dbin.x0);
       if (!wbin[dbin.i]) wbin[dbin.i] = 0;
-      wbin[z] += 1
-      if (wbin[z] > maxBinHeight) maxBinHeight = wbin[z];
+      wbin[dbin.i] += 1
+      if (wbin[dbin.i] > maxBinHeight) maxBinHeight = wbin[dbin.i];
     });
     
     var dHisto = d3.histogram()
       .thresholds(zScaleTicks)
       (depthDataArray);
 
-    var yScale = d3.scaleBand()
+    var yScale = d3.scaleLinear()
       .domain([0, maxBinHeight])
-      .range([0, histoHeight])
-      .paddingInner(histoPadding);
+      .range([0, histoHeight]);
 
     var color = d3.scaleLinear().domain(dDataExtent)
       .interpolate(d3.interpolateHcl).range(['#ffb3ba', '#bae1ff']);
@@ -92,14 +91,15 @@ AFRAME.registerComponent('barchart', {
     bars.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
         const x = xScale(d[chosen.wData]);
-        const z = zScale(getBin(d[chosen.dData]).x0);
-        const y = yScale(bins[d[chosen.wData]][z]) + (xScale.bandwidth() * blockHeight / 2);
-        console.log(yScale(bins[d[chosen.wData]][z]))
+        const dbin = getBin(d[chosen.dData]);
+        const z = zScale(dbin.x0);
+        const y = yScale(bins[d[chosen.wData]][dbin.i]) + (xScale.bandwidth() * blockHeight / 2);
+        bins[d[chosen.wData]][dbin.i] -= 1;
         return x + " " + y + " " + z   
       })
       .attr('width', function(d) { return xScale.bandwidth(); })
       .attr('depth', function(d) { return xScale.bandwidth() * blockDepth; })
-      .attr('height', function(d) { return xScale.bandwidth() * blockHeight; })
+      .attr('height', function(d) { return histoHeight / maxBinHeight - 0.01; })
       .attr('opacity', alpha)
       .attr('color', function(d) { return color(d[chosen.dData]); })
       .on("mouseenter", function(d,i) {
