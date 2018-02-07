@@ -86,7 +86,7 @@ AFRAME.registerComponent('barchart', {
     var chartHolderEntity = d3.select(el.parentNode);
     chartHolderEntity.attr('position' , "0 -0.002 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
-    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 0.5) + "; height: 0.006; depth: " + (histoDepth + 0.5));
+    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 0.5) + "; height: 0.006; depth: " + (histoDepth + 1));
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
     var bars = chartEntity.selectAll('a-box.bar').data(data);
     bars.enter().append('a-box').classed('bar', true)
@@ -101,7 +101,7 @@ AFRAME.registerComponent('barchart', {
       .attr('width', function(d) { return xScale.bandwidth(); })
       .attr('depth', function(d) { return xScale.bandwidth() * blockDepth; })
       .attr('height', function(d) { return histoHeight / maxBinHeight - 0.01; })
-      .attr('opacity', 1)
+      .attr('opacity', alpha)
       .attr('color', function(d) { return color(d[chosen.dData]); })
       .attr('shadow', "cast: true")
       .on("mouseenter", function(d,i) {
@@ -123,15 +123,15 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).select("a-text").remove();
       })
     
-    d3.select("#axes").attr('position', 
+    d3.select("#axes").attr('position', (-histoWidth / 2) + " 0.005 " + (histoDepth / 2))
     var xAxis = d3.select("#x-axis");
     var xLabels = xAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(xScale.domain());
     xLabels.enter().append("a-text").classed("axis", true)
       .attr('color', '#FFF')
-      .attr('align', 'center')
-      .attr('position', function(d, i) { console.log(d);return "0 0.005 0"; })
-      .attr('rotation', '-90 0 0')
-      .attr('scale', '1 1 1')
+      .attr('align', 'right')
+      .attr('position', function(d, i) { return (xScale(d)) +" 0 0"; })
+      .attr('rotation', '-90 90 0')
+      .attr('scale', '0.5 0.5 0.5')
       .attr('value', function(d) { return d; });
 
     // add x-axis
