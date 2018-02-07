@@ -100,8 +100,9 @@ AFRAME.registerComponent('barchart', {
       .attr('width', function(d) { return xScale.bandwidth(); })
       .attr('depth', function(d) { return xScale.bandwidth() * blockDepth; })
       .attr('height', function(d) { return histoHeight / maxBinHeight - 0.01; })
-      .attr('opacity', alpha)
+      .attr('opacity', 1)
       .attr('color', function(d) { return color(d[chosen.dData]); })
+      .attr('shadow', "cast: true")
       .on("mouseenter", function(d,i) {
         d3.select(this).transition().duration(10)
           .attr('opacity', 0.9);
