@@ -79,12 +79,12 @@ AFRAME.registerComponent('barchart', {
       .range([0, histoHeight]);
 
     var color = d3.scaleLinear().domain(dDataExtent)
-      .interpolate(d3.interpolateHcl).range(['#ffb3ba', '#bae1ff']);
+      .interpolate(d3.interpolateHcl).range(['#77ffd1', '#e0282b']);
 
     // Select the current entity object just like an svg
     var currentEntity = d3.select(el);
-    // d3.select(el.parentNode).attr('position' , -histoWidth / 2 + " -0.002 " + (-(histoDepth / 2 + 1)))
-    d3.select(el.parentNode).attr('position' , -histoWidth / 2 + " -0.002 " + (-(histoDepth / 2 + 1)))
+    d3.select(el.parentNode).attr('position' , "0 -0.002 -3");
+    d3.select(el).attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
     d3.select(el.parentNode).attr('geometry' , "width: " + (histoWidth + 0.5) + "; height: 0.006; depth: " + (histoDepth + 0.5));
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
     var bars = currentEntity.selectAll('a-box.bar').data(data);
@@ -123,6 +123,8 @@ AFRAME.registerComponent('barchart', {
 
         d3.select(this).select("a-text").remove();
       })
-    console.log(bins)
+    
+    // add x-axis
+    // add y-axis
   }
 });
