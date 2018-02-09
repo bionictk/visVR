@@ -30,6 +30,8 @@ AFRAME.registerComponent('barchart', {
         blockDepthPadding = 0.05;
     
     var depthBinNum = 20;
+    
+    var zTickFormat = ",";
 
     //// End of configurations
     
@@ -48,6 +50,7 @@ AFRAME.registerComponent('barchart', {
     
     xScale.domain(widthDataArray);
     zScale.domain(dDataExtent).ticks(depthBinNum);
+    zScale.tickFormat(zTickFormat)
     var zScaleTicks = zScale.ticks();
     var getBin = function(d) {
       var i;
@@ -89,7 +92,7 @@ AFRAME.registerComponent('barchart', {
     
     chartHolderEntity.attr('position' , "0 0 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
-    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1) + "; height: 0.006; depth: " + (histoDepth + 1));
+    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1.3) + "; height: 0.006; depth: " + (histoDepth + 1));
     // we use d3's enter/update/exit pattern to draw and bind our dom elements
     var bars = chartEntity.selectAll('a-box.bar').data(data);
     bars.enter().append('a-box').classed('bar', true)
@@ -155,7 +158,7 @@ AFRAME.registerComponent('barchart', {
     // add start and end values
     zAxisArray.unshift(zScaleTicks[0] - zScaleTicks[1] + zScaleTicks[0]);
     zAxisArray.push(zScaleTicks[zScaleTicks.length - 1] + zScaleTicks[1] - zScaleTicks[0]);
-    console.log(zScale.domain())
+    console.log(zAxisArray.map(zScale.tickFormat()))
     var zAxis = d3.select("#z-axis");
     var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zAxisArray);
     zLabels.enter().append("a-text").classed("axis", true)
@@ -164,7 +167,7 @@ AFRAME.registerComponent('barchart', {
       .attr('position', function(d, i) { return (-0.1) + " 0 " + (zScale(d) + zScale.step() / 2); })
       .attr('rotation', '-90 0 0')
       .attr('scale', '0.5 0.5 0.5')
-      .attr('value', function(d) { return d; })
+      .attr('value', function(d) { return zScale.tickFormat(d); })
     var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zAxisArray);
     zLines.enter().append("a-box")
       .attr('width', histoWidth)
