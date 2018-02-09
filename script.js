@@ -22,7 +22,7 @@ AFRAME.registerComponent('barchart', {
   generate: function (data) {
     
     var histoWidth = 4.0,
-        histoDepth = 4.0,
+        histoDepth = 2.0,
         histoHeight = 1.5;
     
     var histoPadding = 0.4, //not in meters
@@ -39,7 +39,7 @@ AFRAME.registerComponent('barchart', {
     
     var zScale = d3.scaleLinear() 
       .range([0, -histoDepth]);
-
+    zScale.step = function() { return zScale(zScale.ticks()[1]) - zScale(zScale.ticks()[0]); };
     var el = this.el;
     
     var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
@@ -133,7 +133,7 @@ AFRAME.registerComponent('barchart', {
     xLabels.enter().append("a-text").classed("axis", true)
       .attr('color', '#FFF')
       .attr('align', 'right')
-      .attr('position', function(d, i) { return (xScale(d)) +" 0 0"; })
+      .attr('position', function(d, i) { return (xScale(d)) + " 0 " + (0.05); })
       .attr('rotation', '-90 90 0')
       .attr('scale', '0.5 0.5 0.5')
       .attr('value', function(d) { return d; })
@@ -143,7 +143,7 @@ AFRAME.registerComponent('barchart', {
       .attr('depth', histoDepth)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (xScale(d) + (xScale.step()) / 2) + ' 0 ' + (-histoDepth / 2);});
+      .attr('position', function(d) {return (xScale(d) + xScale.step() / 2) + ' 0 ' + (-histoDepth / 2);});
     var xAxisLine = xAxis.append("a-box")
       .attr('width', 0.005)
       .attr('depth', histoDepth)
@@ -161,7 +161,7 @@ AFRAME.registerComponent('barchart', {
     zLabels.enter().append("a-text").classed("axis", true)
       .attr('color', '#FFF')
       .attr('align', 'right')
-      .attr('position', function(d, i) { return "0 0 " + zScale(d); })
+      .attr('position', function(d, i) { return (-0.1) + " 0 " + (zScale(d) + zScale.step() / 2); })
       .attr('rotation', '-90 0 0')
       .attr('scale', '0.5 0.5 0.5')
       .attr('value', function(d) { return d; })
@@ -171,13 +171,13 @@ AFRAME.registerComponent('barchart', {
       .attr('depth', 0.005)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (histoWidth / 2) + ' 0 ' + zScale(d);});
-    var zAxisLine = zAxis.append("a-box")
-      .attr('width', histoWidth)
-      .attr('depth', 0.005)
-      .attr('height', 0.002)
-      .attr('color', '#FFF')
-      .attr('position', (histoWidth / 2) + ' 0 ' + 0);
+      .attr('position', function(d) {return (histoWidth / 2) + ' 0 ' + (zScale(d) + zScale.step() / 2);});
+    // var zAxisLine = zAxis.append("a-box")
+    //   .attr('width', histoWidth)
+    //   .attr('depth', 0.005)
+    //   .attr('height', 0.002)
+    //   .attr('color', '#FFF')
+    //   .attr('position', (histoWidth / 2) + ' 0 ' + 0);
     // add x-axis
     // x - lines
     // d3.select(this).append("a-box")
