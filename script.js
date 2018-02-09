@@ -23,14 +23,15 @@ AFRAME.registerComponent('barchart', {
     
     var histoWidth = 4.0,
         histoDepth = 4.0,
-        histoHeight = 1.5; //in meters
-    var histoPadding = 0.4;
+        histoHeight = 1.5;
+    
+    var histoPadding = 0.4, //not in meters
+        blockHeightPadding = 0.01,
+        blockDepthPadding = 0.05;
     
     var depthBinNum = 20;
-    // default alpha for bars
-    var alpha = 0.6;
-    
-    var blockDepth = histoDepth / histoWidth;
+
+    //// End of configurations
     
     var xScale = d3.scaleBand() 
       .range([0, histoWidth])
@@ -79,7 +80,9 @@ AFRAME.registerComponent('barchart', {
     var color = d3.scaleLinear().domain(dDataExtent)
       .interpolate(d3.interpolateHcl).range(['#77ffd1', '#e0282b']);
 
-    var blockHeight = histoHeight / maxBinHeight - 0.01;
+    var blockHeight = histoHeight / maxBinHeight - blockHeightPadding;
+    var blockDepth = histoDepth / 1 - blockDepthPadding;
+    var blockWidth = xScale.bandwidth();
     // Select the current entity object just like an svg
     var chartEntity = d3.select(el);
     var chartHolderEntity = d3.select(el.parentNode);
@@ -99,8 +102,8 @@ AFRAME.registerComponent('barchart', {
         const y = (yScale(hval)) + blockHeight / 2;        
         return x + " " + y + " " + z   
       })
-      .attr('width', function(d) { return xScale.bandwidth(); })
-      .attr('depth', function(d) { return xScale.bandwidth() * blockDepth; })
+      .attr('width', blockWidth)
+      .attr('depth', blockDepth)
       .attr('height', blockHeight)
       // .attr('opacity', alpha)
       .attr('color', function(d) { return color(d[chosen.dData]); })
@@ -149,12 +152,13 @@ AFRAME.registerComponent('barchart', {
       .attr('position', (xScale.step() / -2) + ' 0 ' + (-histoDepth / 2));
 
     console.log(zScaleTicks)
+    console.log(zScale.domain())
     var zAxis = d3.select("#z-axis");
     var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zScaleTicks);
     zLabels.enter().append("a-text").classed("axis", true)
       .attr('color', '#FFF')
       .attr('align', 'right')
-      .attr('position', function(d, i) { return "0 0 0"; })
+      .attr('position', function(d, i) { return "0 0 " + zScale(d); })
       .attr('rotation', '-90 0 0')
       .attr('scale', '0.5 0.5 0.5')
       .attr('value', function(d) { return d; })
@@ -164,7 +168,7 @@ AFRAME.registerComponent('barchart', {
       .attr('depth', 0.005)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (histoWidth / 2) + ' 0 ' + 0;});
+      .attr('position', function(d) {return (histoWidth / 2) + ' 0 ' + zScale(d);});
     var zAxisLine = zAxis.append("a-box")
       .attr('width', histoWidth)
       .attr('depth', 0.005)
