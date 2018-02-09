@@ -113,7 +113,7 @@ AFRAME.registerComponent('barchart', {
       .attr('shadow', "cast: true")
       .on("mouseenter", function(d,i) {
         d3.select(this).transition().duration(10)
-           .attr('color', "#337");
+           .attr('color', "#ffed2d");
 
         d3.select(this).append("a-text")
           .attr('color', color(d[chosen.dData]))
