@@ -81,7 +81,7 @@ AFRAME.registerComponent('barchart', {
       .interpolate(d3.interpolateHcl).range(['#77ffd1', '#e0282b']);
 
     var blockHeight = histoHeight / maxBinHeight - blockHeightPadding;
-    var blockDepth = histoDepth / 1 - blockDepthPadding;
+    var blockDepth = histoDepth / (zScaleTicks.length + 1) - blockDepthPadding;
     var blockWidth = xScale.bandwidth();
     // Select the current entity object just like an svg
     var chartEntity = d3.select(el);
@@ -152,6 +152,7 @@ AFRAME.registerComponent('barchart', {
       .attr('position', (xScale.step() / -2) + ' 0 ' + (-histoDepth / 2));
 
     var zAxisArray = zScaleTicks.slice();
+    // add start and end values
     zAxisArray.unshift(zScaleTicks[0] - zScaleTicks[1] + zScaleTicks[0]);
     zAxisArray.push(zScaleTicks[zScaleTicks.length - 1] + zScaleTicks[1] - zScaleTicks[0]);
     console.log(zScale.domain())
