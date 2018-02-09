@@ -50,7 +50,7 @@ AFRAME.registerComponent('barchart', {
     
     xScale.domain(widthDataArray);
     zScale.domain(dDataExtent).ticks(depthBinNum);
-    zScale.tickFormat(zTickFormat)
+
     var zScaleTicks = zScale.ticks();
     var getBin = function(d) {
       var i;
@@ -158,16 +158,17 @@ AFRAME.registerComponent('barchart', {
     // add start and end values
     zAxisArray.unshift(zScaleTicks[0] - zScaleTicks[1] + zScaleTicks[0]);
     zAxisArray.push(zScaleTicks[zScaleTicks.length - 1] + zScaleTicks[1] - zScaleTicks[0]);
-    console.log(zAxisArray.map(zScale.tickFormat()))
+    var zAxisArrayFormatted = zAxisArray.map(zScale.tickFormat())
+    console.log(zAxisArrayFormatted)
     var zAxis = d3.select("#z-axis");
     var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zAxisArray);
     zLabels.enter().append("a-text").classed("axis", true)
       .attr('color', '#FFF')
       .attr('align', 'right')
-      .attr('position', function(d, i) { return (-0.1) + " 0 " + (zScale(d) + zScale.step() / 2); })
+      .attr('position', function(d) { return (-0.1) + " 0 " + (zScale(d) + zScale.step() / 2); })
       .attr('rotation', '-90 0 0')
       .attr('scale', '0.5 0.5 0.5')
-      .attr('value', function(d) { return zScale.tickFormat(d); })
+      .attr('value', function(d, i) { return "$" + zAxisArrayFormatted[i]; })
     var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zAxisArray);
     zLines.enter().append("a-box")
       .attr('width', histoWidth)
