@@ -84,6 +84,7 @@ AFRAME.registerComponent('barchart', {
     // Select the current entity object just like an svg
     var chartEntity = d3.select(el);
     var chartHolderEntity = d3.select(el.parentNode);
+    
     chartHolderEntity.attr('position' , "0 0 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
     chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1) + "; height: 0.006; depth: " + (histoDepth + 1));
@@ -147,6 +148,28 @@ AFRAME.registerComponent('barchart', {
       .attr('color', '#FFF')
       .attr('position', (xScale.step() / -2) + ' 0 ' + (-histoDepth / 2));
 
+    var zAxis = d3.select("#z-axis");
+    var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zScale.domain());
+    zLabels.enter().append("a-text").classed("axis", true)
+      .attr('color', '#FFF')
+      .attr('align', 'right')
+      .attr('position', function(d, i) { return "0 0 0"; })
+      .attr('rotation', '-90 0 0')
+      .attr('scale', '0.5 0.5 0.5')
+      .attr('value', function(d) { return d; })
+    var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zScale.domain());
+    zLines.enter().append("a-box")
+      .attr('width', histoWidth)
+      .attr('depth', 0.005)
+      .attr('height', 0.002)
+      .attr('color', '#FFF')
+      .attr('position', function(d) {return (histoWidth / 2) + ' 0 ' + 0;});
+    var zAxisLine = zAxis.append("a-box")
+      .attr('width', histoWidth)
+      .attr('depth', 0.005)
+      .attr('height', 0.002)
+      .attr('color', '#FFF')
+      .attr('position', (histoWidth / 2) + ' 0 ' + 0);
     // add x-axis
     // x - lines
     // d3.select(this).append("a-box")
