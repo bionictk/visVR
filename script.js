@@ -50,13 +50,16 @@ AFRAME.registerComponent('barchart', {
     
     xScale.domain(widthDataArray);
     zScale.domain(dDataExtent).ticks(depthBinNum);
-
+    console.log(dDataExtent)
+    
     var zScaleTicks = zScale.ticks();
+    console.log(zScaleTicks.length)
     var getBin = function(d) {
       var i;
       for (i = 0; i < zScaleTicks.length; i++) {
         if (d < zScaleTicks[i]) break;
       }
+      // console.log(d)
       return {i: i, x0: zScaleTicks[i]};
     }
     
@@ -67,6 +70,7 @@ AFRAME.registerComponent('barchart', {
       var wbin = bins[d[chosen.wData]];
       var dbin = getBin(d[chosen.dData]);
       const z = zScale(dbin.x0);
+      // console.log(dbin,z)
       if (!wbin[dbin.i]) wbin[dbin.i] = 0;
       wbin[dbin.i] += 1
       if (wbin[dbin.i] > maxBinHeight) maxBinHeight = wbin[dbin.i];
@@ -159,7 +163,7 @@ AFRAME.registerComponent('barchart', {
     zAxisArray.unshift(zScaleTicks[0] - zScaleTicks[1] + zScaleTicks[0]);
     zAxisArray.push(zScaleTicks[zScaleTicks.length - 1] + zScaleTicks[1] - zScaleTicks[0]);
     var zAxisArrayFormatted = zAxisArray.map(zScale.tickFormat())
-    console.log(zAxisArrayFormatted)
+
     var zAxis = d3.select("#z-axis");
     var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zAxisArray);
     zLabels.enter().append("a-text").classed("axis", true)
