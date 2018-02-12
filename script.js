@@ -146,16 +146,16 @@ AFRAME.registerComponent('barchart', {
     var xLines = xAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(xScale.domain());
     xLines.enter().append("a-box")
       .attr('width', 0.005)
-      .attr('depth', histoDepth)
+      .attr('depth', histoDepth - zScale.step())
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (xScale(d) + xScale.step() / 2) + ' 0 ' + (-histoDepth / 2);});
+      .attr('position', function(d) {return (xScale(d) + xScale.step() / 2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 2);});
     var xAxisLine = xAxis.append("a-box")
       .attr('width', 0.005)
-      .attr('depth', histoDepth)
+      .attr('depth', histoDepth - zScale.step() / 0.7)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', (xScale.step() / -2) + ' 0 ' + (-histoDepth / 2));
+      .attr('position', (xScale.step() / -2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 3));
 
     // add start and end values
     var zAxisArrayFormatted = zScaleTicks.map(zScale.tickFormat())
@@ -171,11 +171,11 @@ AFRAME.registerComponent('barchart', {
       .attr('value', function(d, i) { return "$" + zAxisArrayFormatted[i]; })
     var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zScaleTicks);
     zLines.enter().append("a-box")
-      .attr('width', histoWidth)
+      .attr('width', histoWidth + xScale.step() / 2)
       .attr('depth', 0.005)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (histoWidth / 2) + ' 0 ' + (zScale(d) + zScale.step() / 2);});
+      .attr('position', function(d) {return (histoWidth / 2 - xScale.step() / 3) + ' 0 ' + (zScale(d) + zScale.step() / 2);});
     // var zAxisLine = zAxis.append("a-box")
     //   .attr('width', histoWidth)
     //   .attr('depth', 0.005)
