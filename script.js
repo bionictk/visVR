@@ -25,7 +25,7 @@ AFRAME.registerComponent('barchart', {
         histoDepth = 2.0,
         histoHeight = 1.5;
     
-    var depthBinNum = 5;
+    var depthBinNum = 10;
     
     var histoPadding = 0.4, //not in meters
         blockHeightPadding = 0.01,
@@ -118,9 +118,9 @@ AFRAME.registerComponent('barchart', {
            .attr('color', "#ffed2d");
 
         d3.select(this).append("a-text")
-          .attr('color', color(d[chosen.dData]))
+          .attr('color', 'orange')//color(d[chosen.dData]))
           .attr('align', 'center')
-          .attr('position', function() { return "0 " + 0 + " 0"; } )
+          .attr('position', function() { return "0 " + 0 + " 0.1"; } )
           .attr('scale', '0.5 0.5 0.5')
           // .attr('look-at', '[camera]') todo
           .attr('value', function() { return d[chosen.label] + "\n" + d[chosen.dData]; });
@@ -132,7 +132,7 @@ AFRAME.registerComponent('barchart', {
         d3.select(this).select("a-text").remove();
       })
     
-    d3.select("#axes").attr('position', (-histoWidth / 2) + " 0.005 " + (histoDepth / 2))
+    d3.select("#axes").attr('position', "0 0.002 0")
     var xAxis = d3.select("#x-axis");
     var xLabels = xAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(xScale.domain());
     xLabels.enter().append("a-text").classed("axis", true)
