@@ -53,6 +53,9 @@ AFRAME.registerComponent('barchart', {
     console.log(dDataExtent)
     
     var zScaleTicks = zScale.ticks();
+    // add start and end values
+    zScaleTicks.unshift(zScaleTicks[0] - zScaleTicks[1] + zScaleTicks[0]);
+    zScaleTicks.push(zScaleTicks[zScaleTicks.length - 1] + zScaleTicks[1] - zScaleTicks[0]);
     console.log(zScaleTicks.length)
     var getBin = function(d) {
       var i;
@@ -75,10 +78,6 @@ AFRAME.registerComponent('barchart', {
       wbin[dbin.i] += 1
       if (wbin[dbin.i] > maxBinHeight) maxBinHeight = wbin[dbin.i];
     });
-    
-    var dHisto = d3.histogram()
-      .thresholds(zScaleTicks)
-      (depthDataArray);
 
     var yScale = d3.scaleLinear()
       .domain([0, maxBinHeight])
@@ -158,14 +157,11 @@ AFRAME.registerComponent('barchart', {
       .attr('color', '#FFF')
       .attr('position', (xScale.step() / -2) + ' 0 ' + (-histoDepth / 2));
 
-    var zAxisArray = zScaleTicks.slice();
     // add start and end values
-    zAxisArray.unshift(zScaleTicks[0] - zScaleTicks[1] + zScaleTicks[0]);
-    zAxisArray.push(zScaleTicks[zScaleTicks.length - 1] + zScaleTicks[1] - zScaleTicks[0]);
-    var zAxisArrayFormatted = zAxisArray.map(zScale.tickFormat())
+    var zAxisArrayFormatted = zScaleTicks.map(zScale.tickFormat())
 
     var zAxis = d3.select("#z-axis");
-    var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zAxisArray);
+    var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zScaleTicks);
     zLabels.enter().append("a-text").classed("axis", true)
       .attr('color', '#FFF')
       .attr('align', 'right')
@@ -173,7 +169,7 @@ AFRAME.registerComponent('barchart', {
       .attr('rotation', '-90 0 0')
       .attr('scale', '0.5 0.5 0.5')
       .attr('value', function(d, i) { return "$" + zAxisArrayFormatted[i]; })
-    var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zAxisArray);
+    var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zScaleTicks);
     zLines.enter().append("a-box")
       .attr('width', histoWidth)
       .attr('depth', 0.005)
