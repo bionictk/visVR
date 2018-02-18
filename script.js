@@ -28,7 +28,8 @@ AFRAME.registerComponent('barchart', {
     
     var histoPadding = 0.2, //not in meters // percentage of step
         blockHeightPadding = 0.01,
-        blockDepthPadding = 0.5 / depthBinNum;
+        blockDepthPadding = 0.5 / depthBinNum,
+        labelScale = 0.5;
     
     var zTickFormat = ",";
 
@@ -154,7 +155,7 @@ AFRAME.registerComponent('barchart', {
       .attr('align', 'right')
       .attr('position', function(d, i) { return (xScale(d) + xScale.bandwidth() / 2) + " 0 " + (0.05); })
       .attr('rotation', '-90 90 0')
-      .attr('scale', '0.5 0.5 0.5')
+      .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
       .attr('value', function(d) { return d; })
     var xLines = xAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(xScale.domain());
     xLines.enter().append("a-box")
@@ -177,9 +178,9 @@ AFRAME.registerComponent('barchart', {
     zLabels.enter().append("a-text").classed("axis", true)
       .attr('color', '#FFF')
       .attr('align', 'right')
-      .attr('position', function(d) { return (-0.1) + " 0 " + (zScale(d) - zScale.bandwidth() / 2); })
+      .attr('position', function(d) { return (-0.05) + " 0 " + (-zScale(d) - zScale.bandwidth() / 2); })
       .attr('rotation', '-90 0 0')
-      .attr('scale', '0.5 0.5 0.5')
+      .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
       .attr('value', function(d, i) { return d; })
     var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zScale.domain());
     zLines.enter().append("a-box")
@@ -187,13 +188,30 @@ AFRAME.registerComponent('barchart', {
       .attr('depth', 0.005)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (histoWidth / 2) + ' 0 ' + (zScale(d) - zScale.bandwidth() - zScale.step() * zScale.paddingInner() / 2);});
+      .attr('position', function(d) {return (histoWidth / 2) + ' 0 ' + (-zScale(d) - zScale.bandwidth() - zScale.step() * zScale.paddingInner() / 2);});
     var zAxisLine = zAxis.append("a-box")
       .attr('width', histoWidth)
       .attr('depth', 0.005)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (histoWidth / 2) + ' 0 0';});
+      .attr('position', histoWidth / 2 + ' 0 0');
 
+    
+    var xzAxis = d3.select("#axes").append("a-box")
+      .attr('width', labelScale * 1.2)
+      .attr('depth', 0.005)
+      .attr('height', 0.002)
+      .attr('color', '#FFF')
+      .attr('position', (-labelScale * 0.6) + ' 0 0')
+      .attr('rotation', '0 45 0');
+    
+    var xzAxisLabel = d3.select("#axes").append("a-text")
+      .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
+      .attr('align', 'right')
+      .attr('color', '#FFF')
+      .attr('position', '0 0 0')
+      .attr('rotation', '-90 45 0')
+      .attr('value', chosen.wData);
+      
   }
 });
