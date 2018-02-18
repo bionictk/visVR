@@ -36,11 +36,13 @@ AFRAME.registerComponent('barchart', {
     
     var xScale = d3.scaleBand() 
       .range([0, histoWidth])
-      .paddingInner(histoPadding);
+      .paddingInner(histoPadding * 2)
+      .paddingOuter(histoPadding);
     
     var zScale = d3.scaleBand() 
       .range([0, -histoDepth])
-      .paddingInner(histoPadding);
+      .paddingInner(histoPadding * 2)
+      .paddingOuter(histoPadding);
     // var zScale = d3.scaleLinear() 
     //   .range([0, -histoDepth]);
     // zScale.step = function() { return zScale(zScale.ticks()[1]) - zScale(zScale.ticks()[0]); };
@@ -48,17 +50,26 @@ AFRAME.registerComponent('barchart', {
     var el = this.el;
     
     var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
-    var dDataExtent = d3.extent(depthDataArray);
+    // var dDataExtent = d3.extent(depthDataArray);
     var widthDataArray = data.map(function(d) { return d[chosen.wData]; });
     
     xScale.domain(widthDataArray);
-    var zScaleTicks = zScale.domain(dDataExtent).ticks(depthBinNum);
+    zScale.domain(depthDataArray);
+    // var zScaleTicks = zScale.domain(dDataExtent).ticks(depthBinNum);
     
-    // var zScaleTicks = zScale.ticks();
     // add start and end values
-    zScaleTicks.unshift(zScaleTicks[0] - zScaleTicks[1] + zScaleTicks[0]);
-    zScaleTicks.push(zScaleTicks[zScaleTicks.length - 1] + zScaleTicks[1] - zScaleTicks[0]);
+    // zScaleTicks.unshift(zScaleTicks[0] - zScaleTicks[1] + zScaleTicks[0]);
+    // zScaleTicks.push(zScaleTicks[zScaleTicks.length - 1] + zScaleTicks[1] - zScaleTicks[0]);
 
+    // var getBin = function(d) {
+    //   var i;
+    //   for (i = 0; i < zScaleTicks.length; i++) {
+    //     if (d < zScaleTicks[i]) break;
+    //   }
+    //   // console.log(d)
+    //   return {i: i, x0: zScaleTicks[i]};
+    // }
+    
     var getBin = function(d) {
       var i;
       for (i = 0; i < zScaleTicks.length; i++) {
