@@ -49,6 +49,12 @@ AFRAME.registerComponent('barchart', {
     
     var el = this.el;
     
+    data.sort(function(a, b) {
+      return d3.ascending(a[chosen.dData], b[chosen.dD)
+    })
+    zScale.domain(data.map(function(d) {
+      return d.key;
+    }));
     var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
     // var dDataExtent = d3.extent(depthDataArray);
     var widthDataArray = data.map(function(d) { return d[chosen.wData]; });
@@ -158,7 +164,7 @@ AFRAME.registerComponent('barchart', {
       .attr('depth', histoDepth)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (xScale(d) + xScale.bandwidth() + xScale.step() * xScale.paddingInner() / 2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 2.3);});
+      .attr('position', function(d) {return (xScale(d) + xScale.bandwidth() + xScale.step() * xScale.paddingInner() / 2) + ' 0 ' + (-histoDepth / 2);});
     var xAxisLine = xAxis.append("a-box")
       .attr('width', 0.005)
       .attr('depth', histoDepth)
@@ -179,17 +185,17 @@ AFRAME.registerComponent('barchart', {
       .attr('value', function(d, i) { return d; })
     var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zScale.domain());
     zLines.enter().append("a-box")
-      .attr('width', histoWidth + xScale.step() / 2)
+      .attr('width', histoWidth)
       .attr('depth', 0.005)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (histoWidth / 2 - xScale.step() / 3) + ' 0 ' + (zScale(d) - zScale.bandwidth() - zScale.step() * zScale.paddingInner() / 2);});
+      .attr('position', function(d) {return (histoWidth / 2) + ' 0 ' + (zScale(d) - zScale.bandwidth() - zScale.step() * zScale.paddingInner() / 2);});
     var zAxisLine = zAxis.append("a-box")
-      .attr('width', histoWidth + xScale.step() / 2)
+      .attr('width', histoWidth)
       .attr('depth', 0.005)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (histoWidth / 2 - xScale.step() / 3) + ' 0 0';});
+      .attr('position', function(d) {return (histoWidth / 2) + ' 0 0';});
 
   }
 });
