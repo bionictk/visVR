@@ -103,7 +103,7 @@ AFRAME.registerComponent('barchart', {
     chartHolderEntity.attr('position' , "0 0 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
     chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1.3) + "; height: 0.004; depth: " + (histoDepth + 1));
-    console.log(bins)
+
     var blocks = chartEntity.selectAll('a-box.bar').data(data);
     blocks.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
@@ -115,7 +115,6 @@ AFRAME.registerComponent('barchart', {
         bins[d[chosen.wData]][d[chosen.dData]] -= 1;
         var hval = bins[d[chosen.wData]][d[chosen.dData]];
         const y = yScale(hval) + blockHeight / 2;
-        // console.log(
         return x + " " + y + " " + z;
       })
       .attr('width', blockWidth)
@@ -156,36 +155,41 @@ AFRAME.registerComponent('barchart', {
     var xLines = xAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(xScale.domain());
     xLines.enter().append("a-box")
       .attr('width', 0.005)
-      .attr('depth', histoDepth - zScale.step() / 1.1)
+      .attr('depth', histoDepth)
       .attr('height', 0.002)
       .attr('color', '#FFF')
       .attr('position', function(d) {return (xScale(d) + xScale.bandwidth() + xScale.step() * xScale.paddingInner() / 2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 2.3);});
-    
-    // var xAxisLine = xAxis.append("a-box")
-    //   .attr('width', 0.005)
-    //   .attr('depth', histoDepth - zScale.step() / 1.1)
-    //   .attr('height', 0.002)
-    //   .attr('color', '#FFF')
-    //   .attr('position', (xScale.step() / -2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 2.3));
+    var xAxisLine = xAxis.append("a-box")
+      .attr('width', 0.005)
+      .attr('depth', histoDepth)
+      .attr('height', 0.002)
+      .attr('color', '#FFF')
+      .attr('position', '0 0 ' + (-histoDepth / 2));
 
 //     var zAxisArrayFormatted = zScaleTicks.map(zScale.tickFormat())
 
-//     var zAxis = d3.select("#z-axis");
-//     var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zScaleTicks);
-//     zLabels.enter().append("a-text").classed("axis", true)
-//       .attr('color', '#FFF')
-//       .attr('align', 'right')
-//       .attr('position', function(d) { return (-0.1) + " 0 " + (zScale(d) + zScale.step() / 2); })
-//       .attr('rotation', '-90 0 0')
-//       .attr('scale', '0.5 0.5 0.5')
-//       .attr('value', function(d, i) { return "$" + zAxisArrayFormatted[i]; })
-//     var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zScaleTicks);
-//     zLines.enter().append("a-box")
-//       .attr('width', histoWidth + xScale.step() / 2)
-//       .attr('depth', 0.005)
-//       .attr('height', 0.002)
-//       .attr('color', '#FFF')
-//       .attr('position', function(d) {return (histoWidth / 2 - xScale.step() / 3) + ' 0 ' + (zScale(d) + zScale.step() / 2);});
+    var zAxis = d3.select("#z-axis");
+    var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zScale.domain());//zScaleTicks);
+    zLabels.enter().append("a-text").classed("axis", true)
+      .attr('color', '#FFF')
+      .attr('align', 'right')
+      .attr('position', function(d) { return (-0.1) + " 0 " + (zScale(d) - zScale.bandwidth() / 2); })
+      .attr('rotation', '-90 0 0')
+      .attr('scale', '0.5 0.5 0.5')
+      .attr('value', function(d, i) { return d; })
+    var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zScale.domain());
+    zLines.enter().append("a-box")
+      .attr('width', histoWidth + xScale.step() / 2)
+      .attr('depth', 0.005)
+      .attr('height', 0.002)
+      .attr('color', '#FFF')
+      .attr('position', function(d) {return (histoWidth / 2 - xScale.step() / 3) + ' 0 ' + (zScale(d) - zScale.bandwidth() - zScale.step() * zScale.paddingInner() / 2);});
+    var zAxisLine = zAxis.append("a-box")
+      .attr('width', histoWidth + xScale.step() / 2)
+      .attr('depth', 0.005)
+      .attr('height', 0.002)
+      .attr('color', '#FFF')
+      .attr('position', function(d) {return (histoWidth / 2 - xScale.step() / 3) + ' 0 0';});
 
   }
 });
