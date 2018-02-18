@@ -107,12 +107,14 @@ AFRAME.registerComponent('barchart', {
     var blocks = chartEntity.selectAll('a-box.bar').data(data);
     blocks.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
-        const x = xScale(d[chosen.wData]) + xScale.ban;
-        const dbin = getBin(d[chosen.dData]);
-        const z = zScale(dbin.x0);
-        bins[d[chosen.wData]][dbin.i] -= 1
-        var hval = bins[d[chosen.wData]][dbin.i]
-        const y = (yScale(hval)) + blockHeight / 2;        
+        const x = xScale(d[chosen.wData]) + blockWidth / 2;
+        // const dbin = getBin(d[chosen.dData]);
+        // const z = zScale(dbin.x0);
+        const z = zScale(d[chosen.dData]) - blockDepth / 2;
+        // bins[d[chosen.wData]][dbin.i] -= 1
+        bins[d[chosen.wData]][chosen.dData] -= 1;
+        var hval = bins[d[chosen.wData]][chosen.dData]
+        const y = yScale(hval) + blockHeight / 2;        
         return x + " " + y + " " + z   
       })
       .attr('width', blockWidth)
@@ -120,13 +122,13 @@ AFRAME.registerComponent('barchart', {
       .attr('height', blockHeight)
       // .attr('opacity', alpha)
       .attr('color', function(d) { return color(d[chosen.dData]); })
-      .attr('shadow', "cast: true")
+      // .attr('shadow', "cast: true")
       .on("mouseenter", function(d,i) {
         d3.select(this).transition().duration(10)
            .attr('color', "#ffed2d");
 
         d3.select(this).append("a-text")
-          .attr('color', 'orange')//color(d[chosen.dData]))
+          .attr('color', 'orange')
           .attr('align', 'center')
           .attr('position', function() { return "0 " + 0 + " 0.1"; } )
           .attr('scale', '0.5 0.5 0.5')
@@ -146,7 +148,7 @@ AFRAME.registerComponent('barchart', {
     xLabels.enter().append("a-text").classed("axis", true)
       .attr('color', '#FFF')
       .attr('align', 'right')
-      .attr('position', function(d, i) { return (xScale(d)) + " 0 " + (0.05); })
+      .attr('position', function(d, i) { return (xScale(d) + xScale.bandwidth() / 2) + " 0 " + (0.05); })
       .attr('rotation', '-90 90 0')
       .attr('scale', '0.5 0.5 0.5')
       .attr('value', function(d) { return d; })
@@ -156,32 +158,32 @@ AFRAME.registerComponent('barchart', {
       .attr('depth', histoDepth - zScale.step() / 1.1)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (xScale(d) + xScale.step() / 2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 2.3);});
-    var xAxisLine = xAxis.append("a-box")
-      .attr('width', 0.005)
-      .attr('depth', histoDepth - zScale.step() / 1.1)
-      .attr('height', 0.002)
-      .attr('color', '#FFF')
-      .attr('position', (xScale.step() / -2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 2.3));
+      .attr('position', function(d) {return (xScale(d) + xScale.bandwidth() / 2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 2.3);});
+    // var xAxisLine = xAxis.append("a-box")
+    //   .attr('width', 0.005)
+    //   .attr('depth', histoDepth - zScale.step() / 1.1)
+    //   .attr('height', 0.002)
+    //   .attr('color', '#FFF')
+    //   .attr('position', (xScale.step() / -2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 2.3));
 
-    var zAxisArrayFormatted = zScaleTicks.map(zScale.tickFormat())
+//     var zAxisArrayFormatted = zScaleTicks.map(zScale.tickFormat())
 
-    var zAxis = d3.select("#z-axis");
-    var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zScaleTicks);
-    zLabels.enter().append("a-text").classed("axis", true)
-      .attr('color', '#FFF')
-      .attr('align', 'right')
-      .attr('position', function(d) { return (-0.1) + " 0 " + (zScale(d) + zScale.step() / 2); })
-      .attr('rotation', '-90 0 0')
-      .attr('scale', '0.5 0.5 0.5')
-      .attr('value', function(d, i) { return "$" + zAxisArrayFormatted[i]; })
-    var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zScaleTicks);
-    zLines.enter().append("a-box")
-      .attr('width', histoWidth + xScale.step() / 2)
-      .attr('depth', 0.005)
-      .attr('height', 0.002)
-      .attr('color', '#FFF')
-      .attr('position', function(d) {return (histoWidth / 2 - xScale.step() / 3) + ' 0 ' + (zScale(d) + zScale.step() / 2);});
+//     var zAxis = d3.select("#z-axis");
+//     var zLabels = zAxis.append("a-entity").classed("labels", true).selectAll("a-text.axis").data(zScaleTicks);
+//     zLabels.enter().append("a-text").classed("axis", true)
+//       .attr('color', '#FFF')
+//       .attr('align', 'right')
+//       .attr('position', function(d) { return (-0.1) + " 0 " + (zScale(d) + zScale.step() / 2); })
+//       .attr('rotation', '-90 0 0')
+//       .attr('scale', '0.5 0.5 0.5')
+//       .attr('value', function(d, i) { return "$" + zAxisArrayFormatted[i]; })
+//     var zLines = zAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(zScaleTicks);
+//     zLines.enter().append("a-box")
+//       .attr('width', histoWidth + xScale.step() / 2)
+//       .attr('depth', 0.005)
+//       .attr('height', 0.002)
+//       .attr('color', '#FFF')
+//       .attr('position', function(d) {return (histoWidth / 2 - xScale.step() / 3) + ' 0 ' + (zScale(d) + zScale.step() / 2);});
 
   }
 });
