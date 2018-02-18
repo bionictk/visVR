@@ -26,7 +26,7 @@ AFRAME.registerComponent('barchart', {
     
     var depthBinNum = 10;
     
-    var histoPadding = 0.4, //not in meters
+    var histoPadding = 0.2, //not in meters // percentage of step
         blockHeightPadding = 0.01,
         blockDepthPadding = 0.5 / depthBinNum;
     
@@ -103,7 +103,7 @@ AFRAME.registerComponent('barchart', {
     chartHolderEntity.attr('position' , "0 0 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
     chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1.3) + "; height: 0.004; depth: " + (histoDepth + 1));
-
+    console.log(bins)
     var blocks = chartEntity.selectAll('a-box.bar').data(data);
     blocks.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
@@ -113,9 +113,10 @@ AFRAME.registerComponent('barchart', {
         const z = zScale(d[chosen.dData]) - blockDepth / 2;
         // bins[d[chosen.wData]][dbin.i] -= 1
         bins[d[chosen.wData]][chosen.dData] -= 1;
-        var hval = bins[d[chosen.wData]][chosen.dData]
-        const y = yScale(hval) + blockHeight / 2;        
-        return x + " " + y + " " + z   
+        var hval = bins[d[chosen.wData]][chosen.dData];
+        const y = yScale(hval) + blockHeight / 2;
+        // console.log(
+        return x + " " + y + " " + z;
       })
       .attr('width', blockWidth)
       .attr('depth', blockDepth)
@@ -158,7 +159,8 @@ AFRAME.registerComponent('barchart', {
       .attr('depth', histoDepth - zScale.step() / 1.1)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', function(d) {return (xScale(d) + xScale.bandwidth() / 2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 2.3);});
+      .attr('position', function(d) {return (xScale(d) + xScale.bandwidth() + xScale.step() * xScale.paddingInner() / 2) + ' 0 ' + (-histoDepth / 2 + zScale.step() / 2.3);});
+    
     // var xAxisLine = xAxis.append("a-box")
     //   .attr('width', 0.005)
     //   .attr('depth', histoDepth - zScale.step() / 1.1)
