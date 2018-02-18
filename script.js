@@ -112,8 +112,8 @@ AFRAME.registerComponent('barchart', {
         // const z = zScale(dbin.x0);
         const z = zScale(d[chosen.dData]) - blockDepth / 2;
         // bins[d[chosen.wData]][dbin.i] -= 1
-        bins[d[chosen.wData]][chosen.dData] -= 1;
-        var hval = bins[d[chosen.wData]][chosen.dData];
+        bins[d[chosen.wData]][d[chosen.dData]] -= 1;
+        var hval = bins[d[chosen.wData]][d[chosen.dData]];
         const y = yScale(hval) + blockHeight / 2;
         // console.log(
         return x + " " + y + " " + z;
