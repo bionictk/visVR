@@ -70,37 +70,31 @@ AFRAME.registerComponent('barchart', {
     //   return {i: i, x0: zScaleTicks[i]};
     // }
     
-    var getBin = function(d) {
-      var i;
-      for (i = 0; i < zScaleTicks.length; i++) {
-        if (d < zScaleTicks[i]) break;
-      }
-      // console.log(d)
-      return {i: i, x0: zScaleTicks[i]};
-    }
     
     var bins = {}
     var maxBinHeight = -1;
     data.forEach(function(d) {
       if (!bins[d[chosen.wData]]) bins[d[chosen.wData]] = {};
       var wbin = bins[d[chosen.wData]];
-      var dbin = getBin(d[chosen.dData]);
-      const z = zScale(dbin.x0);
+      // var dbin = getBin(d[chosen.dData]);
+      // const z = zScale(dbin.x0);
       // console.log(dbin,z)
-      if (!wbin[dbin.i]) wbin[dbin.i] = 0;
-      wbin[dbin.i] += 1
-      if (wbin[dbin.i] > maxBinHeight) maxBinHeight = wbin[dbin.i];
+      if (!wbin[d[chosen.dData]]) wbin[d[chosen.dData]] = 0;
+      wbin[d[chosen.dData]] += 1
+      if (wbin[d[chosen.dData]] > maxBinHeight) maxBinHeight = wbin[d[chosen.dData]];
     });
 
     var yScale = d3.scaleLinear()
       .domain([0, maxBinHeight])
       .range([0, histoHeight]);
 
-    var color = d3.scaleLinear().domain(dDataExtent)
-      .interpolate(d3.interpolateHcl).range(['#77ffd1', '#e0282b']);
+    // var color = d3.scaleLinear().domain(dDataExtent)
+    //   .interpolate(d3.interpolateHcl).range(['#77ffd1', '#e0282b']);
+    var color = d3.scaleOrdinal(d3.schemeCategory10).domain(depthDataArray)
 
     var blockHeight = histoHeight / maxBinHeight - blockHeightPadding;
-    var blockDepth = histoDepth / (zScaleTicks.length + 1) - blockDepthPadding;
+    // var blockDepth = histoDepth / (zScaleTicks.length + 1) - blockDepthPadding;
+    var blockDepth = zScale.bandwidth();
     var blockWidth = xScale.bandwidth();
     // Select the current entity object just like an svg
     var chartEntity = d3.select(el);
@@ -108,12 +102,12 @@ AFRAME.registerComponent('barchart', {
     
     chartHolderEntity.attr('position' , "0 0 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
-    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1.3) + "; height: 0.006; depth: " + (histoDepth + 1));
-    // we use d3's enter/update/exit pattern to draw and bind our dom elements
-    var bars = chartEntity.selectAll('a-box.bar').data(data);
-    bars.enter().append('a-box').classed('bar', true)
+    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1.3) + "; height: 0.004; depth: " + (histoDepth + 1));
+
+    var blocks = chartEntity.selectAll('a-box.bar').data(data);
+    blocks.enter().append('a-box').classed('bar', true)
       .attr('position',function (d, i) {
-        const x = xScale(d[chosen.wData]);
+        const x = xScale(d[chosen.wData]) + xScale.ban;
         const dbin = getBin(d[chosen.dData]);
         const z = zScale(dbin.x0);
         bins[d[chosen.wData]][dbin.i] -= 1
