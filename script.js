@@ -1,4 +1,4 @@
-var chosen = { label: "Vehicle Name", wData: "", dData: "Retail Price" }
+var chosen = { label: "Vehicle Name", wData: "make", dData: "Cyl" }
 var d3 = d3, AFRAME = AFRAME;
 AFRAME.registerComponent('barchart', {
   schema: {
@@ -38,9 +38,12 @@ AFRAME.registerComponent('barchart', {
       .range([0, histoWidth])
       .paddingInner(histoPadding);
     
-    var zScale = d3.scaleLinear() 
-      .range([0, -histoDepth]);
-    zScale.step = function() { return zScale(zScale.ticks()[1]) - zScale(zScale.ticks()[0]); };
+    var zScale = d3.scaleBand() 
+      .range([0, -histoDepth])
+      .paddingInner(histoPadding);
+    // var zScale = d3.scaleLinear() 
+    //   .range([0, -histoDepth]);
+    // zScale.step = function() { return zScale(zScale.ticks()[1]) - zScale(zScale.ticks()[0]); };
     
     var el = this.el;
     
