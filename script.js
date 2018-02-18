@@ -1,4 +1,4 @@
-var chosen = { label: "name", hData: "", wData: "make", dData: "price" }
+var chosen = { label: "Vehicle Name", wData: "make", dData: "Retail Price" }
 var d3 = d3, AFRAME = AFRAME;
 AFRAME.registerComponent('barchart', {
   schema: {
@@ -7,13 +7,12 @@ AFRAME.registerComponent('barchart', {
   init: function () {
     var self = this;
     d3.dsv(",", this.data.csv, function(d) {
-      return {
-        name: d["Vehicle Name"],
-        make: d["Vehicle Name"].replace(/ .*/,''),
-        key: +d["Len"],
-        width: +d["Width"],
-        price: +d["Retail Price"]
-      };
+      Object.keys(d).forEach(function(key) {
+        if (d[key] == 
+      });
+      d['make'] = d["Vehicle Name"].replace(/ .*/,'')
+      console.log(d)
+      return d;
     }).then(function(data) {
       self.generate(data);
     });
@@ -42,6 +41,7 @@ AFRAME.registerComponent('barchart', {
     var zScale = d3.scaleLinear() 
       .range([0, -histoDepth]);
     zScale.step = function() { return zScale(zScale.ticks()[1]) - zScale(zScale.ticks()[0]); };
+    
     var el = this.el;
     
     var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
