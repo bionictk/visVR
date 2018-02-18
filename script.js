@@ -40,7 +40,7 @@ AFRAME.registerComponent('barchart', {
       .paddingOuter(histoPadding);
     
     var zScale = d3.scaleBand() 
-      .range([0, -histoDepth])
+      .range([0, histoDepth])
       .paddingInner(histoPadding * 2)
       .paddingOuter(histoPadding);
     // var zScale = d3.scaleLinear() 
@@ -50,11 +50,9 @@ AFRAME.registerComponent('barchart', {
     var el = this.el;
     
     data.sort(function(a, b) {
-      return d3.ascending(a[chosen.dData], b[chosen.dD)
+      return d3.ascending(a[chosen.dData], b[chosen.dData])
     })
-    zScale.domain(data.map(function(d) {
-      return d.key;
-    }));
+    
     var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
     // var dDataExtent = d3.extent(depthDataArray);
     var widthDataArray = data.map(function(d) { return d[chosen.wData]; });
@@ -116,7 +114,7 @@ AFRAME.registerComponent('barchart', {
         const x = xScale(d[chosen.wData]) + blockWidth / 2;
         // const dbin = getBin(d[chosen.dData]);
         // const z = zScale(dbin.x0);
-        const z = zScale(d[chosen.dData]) - blockDepth / 2;
+        const z = -zScale(d[chosen.dData]) - blockDepth / 2;
         // bins[d[chosen.wData]][dbin.i] -= 1
         bins[d[chosen.wData]][d[chosen.dData]] -= 1;
         var hval = bins[d[chosen.wData]][d[chosen.dData]];
