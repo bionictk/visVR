@@ -1,4 +1,4 @@
-var chosen = { label: "Vehicle Name", wData: "make", dData: "Retail Price" }
+var chosen = { label: "Vehicle Name", wData: "", dData: "Retail Price" }
 var d3 = d3, AFRAME = AFRAME;
 AFRAME.registerComponent('barchart', {
   schema: {
@@ -7,11 +7,11 @@ AFRAME.registerComponent('barchart', {
   init: function () {
     var self = this;
     d3.dsv(",", this.data.csv, function(d) {
+      d['make'] = d["Vehicle Name"].replace(/ .*/,'');
       Object.keys(d).forEach(function(key) {
-        if (d[key] == 
+        if (!isNaN(d[key])) d[key] = +d[key];
       });
-      d['make'] = d["Vehicle Name"].replace(/ .*/,'')
-      console.log(d)
+      // there are "*" values that should be ignored
       return d;
     }).then(function(data) {
       self.generate(data);
