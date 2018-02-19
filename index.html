@@ -5,15 +5,18 @@
     <style>html,body{background-color:#030404}</style>
     <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@3.0.3/dist/aframe-event-set-component.min.js"></script>
-
+    <script src="https://cdn.rawgit.com/etiennepinchon/aframe-material/master/dist/aframe-material.min.js"></script>
+    <script type="text/javascript">
+      AFRAME.ASSETS_PATH = "./assets";
+    </script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="script.js"></script>
   </head>
   <body>
     <a-scene>
       <a-assets>
-        <img id="skymap" src="https://cdn.glitch.com/debf1c79-d24f-44f7-9024-902b01f31b98%2Fsky.jpg?1517879532002" crossorigin="anonymous">
-        <img id="floor" src="https://cdn.glitch.com/debf1c79-d24f-44f7-9024-902b01f31b98%2Fwoodfloor.jpg?1518192544658" crossorigin="anonymous">
+        <img id="skymap" src="./assets/sky.jpg" crossorigin="anonymous">
+        <img id="floor" src="./assets/woodfloor.jpg" crossorigin="anonymous">
       </a-assets>
 
       <a-entity id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
@@ -70,7 +73,7 @@
         </a-box>
 
       </a-box>
-      
+      <a-switch position="0.2 1 0" enabled="true"></a-switch>
     </a-scene>
   </body>
 </html>
