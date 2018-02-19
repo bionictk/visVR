@@ -28,31 +28,19 @@
 
       <a-entity id="cameraRig" position="0 1.5 0" rotation="0 0 0">
         <a-entity camera look-controls wasd-controls>
-          <a-entity cursor="fuse: true; fuseTimeout: 500"
+<!--           <a-entity cursor="fuse: true; fuseTimeout: 500"
                     position="0 0 -1"
                     geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.017"
                     material="color: yellow; shader: flat">
-          </a-entity>
+          </a-entity> -->
     	  </a-entity>
         
         <!-- Hands -->
-        <a-entity laser-controls="hand: left">
-          <a-rounded position="0 0 0" width="1" height="1" radius="0.05" rotation="0 0 0" scale="0.3 0.3 0.3">
-            <a-form>
-              <a-switch position="0.2 2.7 0" enabled="true"></a-switch>
-              <a-radio position="0.2 2.4 0" width="3" name="food" label="Burger with fries and pizza" value="pizza"></a-radio>
-              <a-radio position="0.2 2.1 0" width="3" name="food" label="Veggies" checked="true" disabled="true"></a-radio>
-              <a-radio position="0.2 1.8 0" width="3" name="food" label="Ice cream"></a-radio>
-              <a-checkbox position="0.2 1.5 0" width="3" name="stuff" label="I am a checkbox" checked="true"></a-checkbox>
-              <a-checkbox position="0.2 1.2 0" width="3" name="stuff" label="And I am another one" checked="true" disabled="true"></a-checkbox>
-              <a-button position="0.2 0.8 0" name="stuff" value="Click me" type="raised"></a-button>
-              <a-button position="0.2 0.35 0" width="3" name="stuff" value="You cannot click me" disabled="true"></a-button>
-            </a-form>
-          </a-rounded>
-        </a-entity>
+        <a-entity laser-controls="hand: left"></a-entity>
         <a-entity laser-controls="hand: right"></a-entity>
 
       </a-entity>
+
       <a-box id="chartWrapper" geometry="width: 1; height: 0.004; depth: 1"
                 material="shader: flat; color: #227"
                 shadow="receive: false"
@@ -80,6 +68,19 @@
         </a-box>
 
       </a-box>
+      
+      <a-box position="0 2 0" width="1" height="0.01" depth="1" rotation="0 0 0">
+            <a-form>
+              <a-switch position="0.2 2.7 0" enabled="true"></a-switch>
+              <a-radio position="0.2 2.4 0" width="3" name="food" label="Burger with fries and pizza" value="pizza"></a-radio>
+              <a-radio position="0.2 2.1 0" width="3" name="food" label="Veggies" checked="true" disabled="true"></a-radio>
+              <a-radio position="0.2 1.8 0" width="3" name="food" label="Ice cream"></a-radio>
+              <a-checkbox position="0.2 1.5 0" width="3" name="stuff" label="I am a checkbox" checked="true"></a-checkbox>
+              <a-checkbox position="0.2 1.2 0" width="3" name="stuff" label="And I am another one" checked="true" disabled="true"></a-checkbox>
+              <a-button position="0.2 0.8 0" name="stuff" value="Click me" type="raised"></a-button>
+              <a-button position="0.2 0.35 0" width="3" name="stuff" value="You cannot click me" disabled="true"></a-button>
+            </a-form>
+          </a-box>
       
     </a-scene>
   </body>
