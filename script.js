@@ -105,12 +105,15 @@ AFRAME.registerComponent('gridchart', {
     var chartEntity = d3.select(el);
     var chartHolderEntity = d3.select(el.parentNode);
     var zWall = d3.select("#zWall");
-    zWall.attr('position', '0 ' + histoHeight / 2 + ' ' + -histoDepth / 2)
+    zWall.attr('position', '0 ' + histoHeight / 2 + ' ' + -(histoDepth + 1.5 ) / 2)
     zWall.attr('geometry', "width: " + (histoWidth + 1.3) + "; height: " + histoHeight + "; depth: 0.004");
+    var xWall = d3.select("#xWall");
+    xWall.attr('position', (histoWidth + 1.3) / 2 + ' ' + histoHeight / 2 + ' 0')
+    xWall.attr('geometry', "width: " + (histoDepth + 1.5) + "; height: " + histoHeight + "; depth: 0.004");
     
     chartHolderEntity.attr('position' , "0 0 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
-    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1.3) + "; height: 0.004; depth: " + (histoDepth + 1));
+    chartHolderEntity.attr('geometry' , "width: " + (histoWidth + 1.3) + "; height: 0.004; depth: " + (histoDepth + 1.5));
 
     var blocks = chartEntity.selectAll('a-box.bar').data(data);
     blocks.enter().append('a-box').classed('bar', true)
@@ -237,7 +240,12 @@ AFRAME.registerComponent('gridchart', {
       .attr('rotation', '-90 45 0')
       .attr('value', chosen.wData);
       
-    zWall.append("a-text")
-      .attr('value', 'test')
+    zWall = zWall.append("a-entity")
+      .attr('position', -histoWidth / 2 + ' ' + -histoHeight / 2 + ' 0.002');
+    xWall = xWall.append("a-entity")
+      .attr('position', '0 0 0.002');
+    
+    zWall.append("a-box")
+      .attr('scale', '0.01 0.01 0.01')
   }
 });
