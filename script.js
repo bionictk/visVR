@@ -309,3 +309,12 @@ AFRAME.registerComponent('gridchart', {
     // zWallHolder.attr('visible', false)
   }
 });
+
+AFRAME.registerComponent('listen-left', {
+  init: function () {
+    var el = this.el;
+    el.addEventListener('menudown', function (evt) {
+      el.setAttribute('visible', !el.getAttribute('visible'));
+    });
+  }
+});

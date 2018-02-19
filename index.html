@@ -36,8 +36,8 @@
     	  </a-entity>
         
         <!-- Hands -->
-        <a-entity laser-controls="hand: left"></a-entity>
-        <a-entity laser-controls="hand: right"></a-entity>
+        <a-entity laser-controls="hand: left" listen-left></a-entity>
+        <a-entity laser-controls="hand: right" listen-right></a-entity>
 
       </a-entity>
 
@@ -68,19 +68,6 @@
         </a-box>
 
       </a-box>
-      
-      <a-box position="0 2 0" width="1" height="0.01" depth="1" rotation="0 0 0">
-            <a-form>
-              <a-switch position="0.2 2.7 0" enabled="true"></a-switch>
-              <a-radio position="0.2 2.4 0" width="3" name="food" label="Burger with fries and pizza" value="pizza"></a-radio>
-              <a-radio position="0.2 2.1 0" width="3" name="food" label="Veggies" checked="true" disabled="true"></a-radio>
-              <a-radio position="0.2 1.8 0" width="3" name="food" label="Ice cream"></a-radio>
-              <a-checkbox position="0.2 1.5 0" width="3" name="stuff" label="I am a checkbox" checked="true"></a-checkbox>
-              <a-checkbox position="0.2 1.2 0" width="3" name="stuff" label="And I am another one" checked="true" disabled="true"></a-checkbox>
-              <a-button position="0.2 0.8 0" name="stuff" value="Click me" type="raised"></a-button>
-              <a-button position="0.2 0.35 0" width="3" name="stuff" value="You cannot click me" disabled="true"></a-button>
-            </a-form>
-          </a-box>
       
     </a-scene>
   </body>
