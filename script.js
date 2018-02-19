@@ -1,6 +1,6 @@
 var chosen = { label: "Vehicle Name", wData: "Make", dData: "Cyl" }
 var d3 = d3, AFRAME = AFRAME;
-AFRAME.registerComponent('barchart', {
+AFRAME.registerComponent('gridchart', {
   schema: {
     csv: {}
   },
@@ -157,6 +157,13 @@ AFRAME.registerComponent('barchart', {
       .attr('rotation', '-90 90 0')
       .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
       .attr('value', function(d) { return d; })
+    xLabels.enter().append("a-text").classed("axis", true)
+      .attr('color', '#FFF')
+      .attr('align', 'left')
+      .attr('position', function(d, i) { return (xScale(d) + xScale.bandwidth() / 2) + " 0 " + (-histoDepth - 0.05); })
+      .attr('rotation', '-90 90 0')
+      .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
+      .attr('value', function(d) { return d; })
     var xLines = xAxis.append("a-entity").classed("lines", true).selectAll("a-box.axis").data(xScale.domain());
     xLines.enter().append("a-box")
       .attr('width', 0.005)
@@ -179,6 +186,13 @@ AFRAME.registerComponent('barchart', {
       .attr('color', '#FFF')
       .attr('align', 'right')
       .attr('position', function(d) { return (-0.05) + " 0 " + (-zScale(d) - zScale.bandwidth() / 2); })
+      .attr('rotation', '-90 0 0')
+      .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
+      .attr('value', function(d, i) { return d; })
+    zLabels.enter().append("a-text").classed("axis", true)
+      .attr('color', '#FFF')
+      .attr('align', 'left')
+      .attr('position', function(d) { return (histoWidth + 0.05) + " 0 " + (-zScale(d) - zScale.bandwidth() / 2); })
       .attr('rotation', '-90 0 0')
       .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
       .attr('value', function(d, i) { return d; })

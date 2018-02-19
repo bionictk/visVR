@@ -26,7 +26,7 @@
       <a-entity light="type: directional; color: #FFF; intensity:0.7; castShadow: false;" position="-3 5 0" rotation="3 3 5"></a-entity>
       <a-light type="hemisphere" groundcolor="#888" intensity="0.7"></a-light>
 
-      <a-entity id="cameraRig" position="0 3 -3" rotation="-90 0 0">
+      <a-entity id="cameraRig" position="0 1.5 0" rotation="0 0 0">
         <a-entity camera look-controls wasd-controls>
           <a-entity cursor="fuse: true; fuseTimeout: 500"
                     position="0 0 -1"
@@ -40,11 +40,11 @@
         <a-entity hand-controls="right" aabb-collider="objects: .cube;" grab></a-entity>
       
       </a-entity>
-      <a-box id="chartWrapper" geometry="width: 1; height: 0.006; depth: 1"
+      <a-box id="chartWrapper" geometry="width: 1; height: 0.004; depth: 1"
                 material="shader: flat; color: #227"
                 shadow="receive: false"
                 position="0 -0.002 0">
-        <a-entity barchart="csv: car.csv" position="0 0 0">
+        <a-entity gridchart="csv: car.csv" position="0 0 0">
           <a-entity id="axes">
             <a-entity id="x-axis">
             </a-entity>
@@ -54,6 +54,12 @@
             </a-entity>
           </a-entity>
         </a-entity>
+        <a-box id="zWall" geometry="width: 1; height: 0.004; depth: 1"
+                material="shader: flat; color: #222"
+                shadow="receive: false"
+                position="0 -0.002 0"
+                rotation="-90 0 0">
+        </a-box>
 
       </a-box>
       
