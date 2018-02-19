@@ -1,4 +1,4 @@
-var chosen = { label: "Vehicle Name", wData: "make", dData: "Cyl" }
+var chosen = { label: "Vehicle Name", wData: "Make", dData: "Cyl" }
 var d3 = d3, AFRAME = AFRAME;
 AFRAME.registerComponent('barchart', {
   schema: {
@@ -7,7 +7,7 @@ AFRAME.registerComponent('barchart', {
   init: function () {
     var self = this;
     d3.dsv(",", this.data.csv, function(d) {
-      d['make'] = d["Vehicle Name"].replace(/ .*/,'');
+      d['Make'] = d["Vehicle Name"].replace(/ .*/,'');
       Object.keys(d).forEach(function(key) {
         if (!isNaN(d[key])) d[key] = +d[key];
       });
@@ -207,16 +207,16 @@ AFRAME.registerComponent('barchart', {
     
     var xzAxisLabel1 = d3.select("#axes").append("a-text")
       .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
-      .attr('align', 'left')
+      .attr('align', 'center')
       .attr('color', '#FFF')
-      .attr('position', (-labelScale * 0.6 / 1.4142) + ' 0 ' + (labelScale * 0.6 / 1.4142))
+      .attr('position', (-labelScale * 0.6 / 1.4142 * 1.3) + ' 0 ' + (labelScale * 0.6 / 1.4142 / 1.3))
       .attr('rotation', '-90 45 0')
       .attr('value', chosen.dData);
     var xzAxisLabel2 = d3.select("#axes").append("a-text")
       .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
-      .attr('align', 'left')
+      .attr('align', 'center')
       .attr('color', '#FFF')
-      .attr('position', (-labelScale * 0.6 / 1.4142) + ' 0 ' + (labelScale * 0.6 / 1.4142 + 0.1))
+      .attr('position', (-labelScale * 0.6 / 1.4142 / 1.3) + ' 0 ' + (labelScale * 0.6 / 1.4142 * 1.3))
       .attr('rotation', '-90 45 0')
       .attr('value', chosen.wData);
       
