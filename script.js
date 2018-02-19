@@ -326,6 +326,7 @@ AFRAME.registerComponent('listen-left', {
     el.addEventListener('gripdown', function (evt) {
       lgrip = true;
       if (rgrip) scaling = true;
+      console.log(3)
     });
     el.addEventListener('trackpaddown', function (evt) {
       lgrip = false;
