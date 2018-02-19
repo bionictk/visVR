@@ -1,4 +1,4 @@
-var chosen = { label: "Vehicle Name", wData: "AWD", dData: "AWD" }
+var chosen = { label: "Vehicle Name", wData: "Make", dData: "AWD" }
 var d3 = d3, AFRAME = AFRAME;
 AFRAME.registerComponent('gridchart', {
   schema: {
