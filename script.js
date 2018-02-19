@@ -104,6 +104,9 @@ AFRAME.registerComponent('gridchart', {
     // Select the current entity object just like an svg
     var chartEntity = d3.select(el);
     var chartHolderEntity = d3.select(el.parentNode);
+    var zWall = d3.select("#zWall");
+    zWall.attr('position', '0 ' + histoHeight / 2 + ' ' + -histoDepth / 2)
+    zWall.attr('geometry', "width: " + (histoWidth + 1.3) + "; height: " + histoHeight + "; depth: 0.004");
     
     chartHolderEntity.attr('position' , "0 0 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
@@ -234,5 +237,7 @@ AFRAME.registerComponent('gridchart', {
       .attr('rotation', '-90 45 0')
       .attr('value', chosen.wData);
       
+    zWall.append("a-text")
+      .attr('value', 'test')
   }
 });
