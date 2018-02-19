@@ -81,15 +81,25 @@ AFRAME.registerComponent('gridchart', {
     
     
     var bins = {}
+    var zWallBins = {}
+    var xWallBins = {}
     var maxBinHeight = -1;
     data.forEach(function(d) {
-      if (!bins[d[chosen.wData]]) bins[d[chosen.wData]] = {};
+      if (!bins[d[chosen.wData]]) {
+        bins[d[chosen.wData]] = {};
+        zWallBins[d[chosen.wData]] = 0;
+      };
+      zWallBins[d[chosen.wData]] += 1;
       var wbin = bins[d[chosen.wData]];
       // var dbin = getBin(d[chosen.dData]);
       // const z = zScale(dbin.x0);
       // console.log(dbin,z)
-      if (!wbin[d[chosen.dData]]) wbin[d[chosen.dData]] = 0;
-      wbin[d[chosen.dData]] += 1
+      if (!wbin[d[chosen.dData]]) {
+        wbin[d[chosen.dData]] = 0;
+        xWallBins[d[chosen.dData]] = 0;
+      }
+      wbin[d[chosen.dData]] += 1;
+      xWallBins[d[chosen.dData]] += 1;
       if (wbin[d[chosen.dData]] > maxBinHeight) maxBinHeight = wbin[d[chosen.dData]];
     });
 
@@ -249,6 +259,8 @@ AFRAME.registerComponent('gridchart', {
     xWall = xWall.append("a-entity")
       .attr('position', histoDepth / 2 + ' ' + -histoHeight / 2 + ' 0.002');
     
+    console.log(zWallBins, data)
+    // var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
     // xWall.append("a-box")
     //   .attr('scale', '0.01 0.01 0.01')
     
