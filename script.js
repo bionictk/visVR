@@ -163,19 +163,19 @@ AFRAME.registerComponent('gridchart', {
       .attr('color', function(d) { return color(d[chosen.dData]); })
       // .attr('shadow', "cast: true")
       // .attr('event-set__enter', "_event: mouseenter;
-      // .attr('change-color-on-hover', "#ffed2d")
-      .on("mouseenter", function(d,i) {
-        d3.select(this).transition().duration(10)
-           .attr('color', "#ffed2d");
+      .attr('change-color-on-hover', "#ffed2d")
+//       .on("mouseenter", function(d,i) {
+//         d3.select(this).transition().duration(10)
+//            .attr('color', "#ffed2d");
 
-        d3.select(this).append("a-text")
-          .attr('color', 'orange')
-          .attr('align', 'center')
-          .attr('position', function() { return "0 " + 0 + " 0.1"; } )
-          .attr('scale', '0.5 0.5 0.5')
-          // .attr('look-at', '[camera]') todo
-          .attr('value', function() { return d[chosen.label] + "\n" + d[chosen.dData]; });
-      })
+//         d3.select(this).append("a-text")
+//           .attr('color', 'orange')
+//           .attr('align', 'center')
+//           .attr('position', function() { return "0 " + 0 + " 0.1"; } )
+//           .attr('scale', '0.5 0.5 0.5')
+//           // .attr('look-at', '[camera]') todo
+//           .attr('value', function() { return d[chosen.label] + "\n" + d[chosen.dData]; });
+//       })
       .on("mouseleave", function(d,i) {
         d3.select(this).transition().duration(300)
           .attr('color', color(d[chosen.dData]))
@@ -359,20 +359,20 @@ AFRAME.registerComponent('listen-right', {
   }
 });
 
-// AFRAME.registerComponent('change-color-on-hover', {
-//   schema: {
-//     color: {default: 'red'}
-//   },
-//   init: function () {
-//     var data = this.data;
-//     var el = this.el;  // <a-box>
-//     var defaultColor = el.getAttribute('material').color;
-//     el.addEventListener('mouseenter', function () {
-//       el.transition().duration(100)
-//            .attr('color', data.color);
-//     });
-//     el.addEventListener('mouseleave', function () {
-//       el.setAttribute('color', defaultColor);
-//     });
-//   }
-// });
+AFRAME.registerComponent('change-color-on-hover', {
+  schema: {
+    color: {default: 'red'}
+  },
+  init: function () {
+    var data = this.data;
+    var el = this.el;  // <a-box>
+    var defaultColor = el.getAttribute('material').color;
+    el.addEventListener('mouseenter', function () {
+      d3.select(el).transition().duration(100)
+           .attr('color', data.color);
+    });
+    el.addEventListener('mouseleave', function () {
+      el.setAttribute('color', defaultColor);
+    });
+  }
+});
