@@ -132,9 +132,9 @@ AFRAME.registerComponent('gridchart', {
     // Select the current entity object just like an svg
     var chartEntity = d3.select(el);
     var chartHolderEntity = d3.select(el.parentNode);
-    var zWall = d3.select("#zWall");
-    zWall.attr('position', '0 ' + histoHeight / 2 + ' ' + -(histoDepth + 1.5 ) / 2)
-    zWall.attr('geometry', "width: " + (histoWidth + 1.3) + "; height: " + histoHeight + "; depth: 0.004");
+    var zWallHolder = d3.select("#zWall");
+    zWallHolder.attr('position', '0 ' + histoHeight / 2 + ' ' + -(histoDepth + 1.5 ) / 2)
+    zWallHolder.attr('geometry', "width: " + (histoWidth + 1.3) + "; height: " + histoHeight + "; depth: 0.004");
     var xWall = d3.select("#xWall");
     xWall.attr('position', (histoWidth + 1.3) / 2 + ' ' + histoHeight / 2 + ' 0')
     xWall.attr('geometry', "width: " + (histoDepth + 1.5) + "; height: " + histoHeight + "; depth: 0.004");
@@ -268,32 +268,15 @@ AFRAME.registerComponent('gridchart', {
       .attr('rotation', '-90 45 0')
       .attr('value', chosen.wData);
       
-    zWall = zWall.append("a-entity")
+    var zWall = zWallHolder.append("a-entity")
       .attr('position', -histoWidth / 2 + ' ' + -histoHeight / 2 + ' 0.002');
     xWall = xWall.append("a-entity")
       .attr('position', histoDepth / 2 + ' ' + -histoHeight / 2 + ' 0.002');
     
     // console.log(zWallBins, data)
     
-    var zW_yScale = d3.scaleLinear().range([histoHeight, 0]).domain([0, d3.max(zW_data, function(d) { return d.val; })]);
-
-    // xWall.append("a-box")
-    //   .attr('scale', '0.01 0.01 0.01')
-                                                                     
-    zWall.selectAll(".bar")
-      .data(zW_data)
-      .enter().append("a-box")
-      .attr("class", "bar")
-      .attr('width', histoWidth)
-      .attr('depth', 0.005)
-      .attr('height', 0.002)
-      .attr('color', '#FFF')
-      .attr('position',
-      .attr("position", function(d) { 
-        const x = xScale(d[chosen.wData]) + blockWidth / 2;
-        return x(d.letter); })
-      .attr("y", function(d) { return y(d.frequency); })
-      .attr("width", x.bandwidth())
-      .attr("height", function(d) { return height - y(d.frequency); });
+   
+    
+    // zWallHolder.attr('visible', false)
   }
 });
