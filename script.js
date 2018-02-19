@@ -310,11 +310,48 @@ AFRAME.registerComponent('gridchart', {
   }
 });
 
+var lgrip = false, rgrip = false;
+var scaling = false;
+
 AFRAME.registerComponent('listen-left', {
   init: function () {
     var el = this.el;
+    var zwall = d3.select("#zWall");
     el.addEventListener('menudown', function (evt) {
-      el.setAttribute('visible', !el.getAttribute('visible'));
+      zwall.attr('visible', !zwall.attr('visible'));
+    });
+    el.addEventListener('trackpaddown', function (evt) {
+      zwall.attr('visible', !zwall.attr('visible'));
+    });
+    el.addEventListener('gripdown', function (evt) {
+      lgrip = true;
+      if (rgrip) scaling = true;
+    });
+    el.addEventListener('trackpaddown', function (evt) {
+      lgrip = false;
+      scaling = false;
+    });
+    
+  }
+});
+
+AFRAME.registerComponent('listen-right', {
+  init: function () {
+    var el = this.el;
+    var xwall = d3.select("#xWall");
+    el.addEventListener('menudown', function (evt) {
+      xwall.attr('visible', !xwall.attr('visible'));
+    });
+    el.addEventListener('trackpaddown', function (evt) {
+      xwall.attr('visible', !xwall.attr('visible'));
+    });
+    el.addEventListener('gripdown', function (evt) {
+      rgrip = true;
+      if (lgrip) scaling = true;
+    });
+    el.addEventListener('trackpaddown', function (evt) {
+      rgrip = false;
+      scaling = false;
     });
   }
 });
