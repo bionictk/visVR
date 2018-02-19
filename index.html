@@ -6,6 +6,7 @@
     <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@3.0.3/dist/aframe-event-set-component.min.js"></script>
     <script src="https://cdn.rawgit.com/etiennepinchon/aframe-material/master/dist/aframe-material.min.js"></script>
+    <script src="https://rawgit.com/caseyyee/aframe-ui-widgets/master/dist/ui-widgets.min.js"></script>
     <script type="text/javascript">
       AFRAME.ASSETS_PATH = "./assets";
     </script>
@@ -19,7 +20,7 @@
         <img id="floor" src="./assets/woodfloor.jpg" crossorigin="anonymous">
       </a-assets>
 
-      <a-entity id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
+      <a-entity id="sky" geometry="primitive:sphere; radius:3000; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
       <a-entity id="ground"
                 geometry="primitive: box; width: 15; height: 0.01; depth: 15"
                 material="shader: flat; src: #floor; repeat: 15 7"
@@ -31,7 +32,7 @@
       <a-entity light="type: directional; color: #FFF; intensity:0.7; castShadow: false;" position="-3 5 0" rotation="3 3 5"></a-entity>
       <a-light type="hemisphere" groundcolor="#888" intensity="0.7"></a-light>
 
-      <a-entity id="cameraRig" position="0 1.5 0" rotation="0 0 0">
+      <a-entity id="cameraRig" position="0 0 0" rotation="0 0 0">
         <a-entity camera look-controls wasd-controls>
 <!--           <a-entity cursor="fuse: true; fuseTimeout: 500"
                     position="0 0 -1"
@@ -50,30 +51,24 @@
                 material="shader: flat; color: #227"
                 shadow="receive: false"
                 position="0 -0.002 0">
-        <a-entity gridchart="csv: car.csv" position="0 0 0">
-          <a-entity id="axes">
-            <a-entity id="x-axis">
-            </a-entity>
-            <a-entity id="y-axis">
-            </a-entity>
-            <a-entity id="z-axis">
-            </a-entity>
-          </a-entity>
+        <a-entity id="gridchart" gridchart="csv: car.csv" position="0 0 0">
+ 
         </a-entity>
-        <a-box id="zWall" geometry="width: 1; height: 0.004; depth: 1"
-                material="color: #BBB"
-                position="0 0 0"
-                rotation="0 0 0">
-        </a-box>
-        
-        <a-box id="xWall" geometry="width: 1; height: 0.004; depth: 1"
-                material="color: #BBB"
-                position="0 0 0"
-                rotation="0 -90 0">
-        </a-box>
 
       </a-box>
-      <a-switch position="0.2 1 0" enabled="true"></a-switch>
+      <a-entity id="panels">
+        <a-box id="panelx" geometry="width: 0.2; height: 4; depth: 0.004"
+                material="color: #BBB"
+                position="2 1 2"
+                rotation="0 235 0">
+        </a-box>
+
+        <a-box id="panelz" geometry="width: 0.2; height: 4; depth: 0.004"
+                  material="color: #BBB"
+                  position="-3 1 0"
+                  rotation="0 70 0">
+        </a-box>
+      </a-entity>
     </a-scene>
   </body>
 </html>
