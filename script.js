@@ -103,6 +103,12 @@ AFRAME.registerComponent('gridchart', {
       if (wbin[d[chosen.dData]] > maxBinHeight) maxBinHeight = wbin[d[chosen.dData]];
     });
 
+    zW_data = []
+    Object.keys(zWallBins).forEach(function(key) {
+      zW_data.push({
+      })
+    });
+    
     var yScale = d3.scaleLinear()
       .domain([0, maxBinHeight])
       .range([0, histoHeight]);
