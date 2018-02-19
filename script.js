@@ -94,19 +94,27 @@ AFRAME.registerComponent('gridchart', {
       // var dbin = getBin(d[chosen.dData]);
       // const z = zScale(dbin.x0);
       // console.log(dbin,z)
-      if (!wbin[d[chosen.dData]]) {
-        wbin[d[chosen.dData]] = 0;
-        xWallBins[d[chosen.dData]] = 0;
-      }
+      if (!wbin[d[chosen.dData]]) wbin[d[chosen.dData]] = 0;
+      if (!xWallBins[d[chosen.dData]]) xWallBins[d[chosen.dData]] = 0;
       wbin[d[chosen.dData]] += 1;
       xWallBins[d[chosen.dData]] += 1;
       if (wbin[d[chosen.dData]] > maxBinHeight) maxBinHeight = wbin[d[chosen.dData]];
     });
 
-    zW_data = []
+    var zW_data = []
     Object.keys(zWallBins).forEach(function(key) {
-      zW_data.push({
-      })
+      var temp = {}
+      temp[chosen.wData] = key;
+      temp.val = zWallBins[key];
+      zW_data.push(temp);
+    });
+    
+    var xW_data = []
+    Object.keys(xWallBins).forEach(function(key) {
+      var temp = {}
+      temp[chosen.dData] = key;
+      temp.val = xWallBins[key];
+      xW_data.push(temp);
     });
     
     var yScale = d3.scaleLinear()
@@ -265,10 +273,10 @@ AFRAME.registerComponent('gridchart', {
     xWall = xWall.append("a-entity")
       .attr('position', histoDepth / 2 + ' ' + -histoHeight / 2 + ' 0.002');
     
-    console.log(zWallBins, data)
+    // console.log(zWallBins, data)
     
-    var zW_yScale = d3.scaleLinear().range([histoHeight, 0]).domain([0, d3.max();
-    // var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
+    var zW_yScale = d3.scaleLinear().range([histoHeight, 0]).domain([0, d3.max(zW_data, function(d) { return d.val; })]);
+
     // xWall.append("a-box")
     //   .attr('scale', '0.01 0.01 0.01')
                                                                      
@@ -276,6 +284,11 @@ AFRAME.registerComponent('gridchart', {
       .data(zW_data)
       .enter().append("a-box")
       .attr("class", "bar")
+      .attr('width', histoWidth)
+      .attr('depth', 0.005)
+      .attr('height', 0.002)
+      .attr('color', '#FFF')
+      .attr('position',
       .attr("position", function(d) { 
         const x = xScale(d[chosen.wData]) + blockWidth / 2;
         return x(d.letter); })
