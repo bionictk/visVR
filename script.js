@@ -56,6 +56,10 @@ AFRAME.registerComponent('gridchart', {
     
     var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
     // var dDataExtent = d3.extent(depthDataArray);
+    
+    data.sort(function(a, b) {
+      return d3.ascending(a[chosen.wData], b[chosen.wData])
+    })
     var widthDataArray = data.map(function(d) { return d[chosen.wData]; });
     
     xScale.domain(widthDataArray);
@@ -243,9 +247,10 @@ AFRAME.registerComponent('gridchart', {
     zWall = zWall.append("a-entity")
       .attr('position', -histoWidth / 2 + ' ' + -histoHeight / 2 + ' 0.002');
     xWall = xWall.append("a-entity")
-      .attr('position', '0 0 0.002');
+      .attr('position', histoDepth / 2 + ' ' + -histoHeight / 2 + ' 0.002');
     
-    zWall.append("a-box")
-      .attr('scale', '0.01 0.01 0.01')
+    // xWall.append("a-box")
+    //   .attr('scale', '0.01 0.01 0.01')
+    
   }
 });
