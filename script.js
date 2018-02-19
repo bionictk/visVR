@@ -202,14 +202,21 @@ AFRAME.registerComponent('barchart', {
       .attr('depth', 0.005)
       .attr('height', 0.002)
       .attr('color', '#FFF')
-      .attr('position', (-labelScale * 0.6) + ' 0 0')
+      .attr('position', (-labelScale * 0.6 / 1.4142) + ' 0 ' + (labelScale * 0.6 / 1.4142))
       .attr('rotation', '0 45 0');
     
-    var xzAxisLabel = d3.select("#axes").append("a-text")
+    var xzAxisLabel1 = d3.select("#axes").append("a-text")
       .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
-      .attr('align', 'right')
+      .attr('align', 'left')
       .attr('color', '#FFF')
-      .attr('position', '0 0 0')
+      .attr('position', (-labelScale * 0.6 / 1.4142) + ' 0 ' + (labelScale * 0.6 / 1.4142))
+      .attr('rotation', '-90 45 0')
+      .attr('value', chosen.dData);
+    var xzAxisLabel2 = d3.select("#axes").append("a-text")
+      .attr('scale', labelScale + ' ' + labelScale + ' ' + labelScale)
+      .attr('align', 'left')
+      .attr('color', '#FFF')
+      .attr('position', (-labelScale * 0.6 / 1.4142) + ' 0 ' + (labelScale * 0.6 / 1.4142 + 0.1))
       .attr('rotation', '-90 45 0')
       .attr('value', chosen.wData);
       
