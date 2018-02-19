@@ -162,6 +162,8 @@ AFRAME.registerComponent('gridchart', {
       // .attr('opacity', alpha)
       .attr('color', function(d) { return color(d[chosen.dData]); })
       // .attr('shadow', "cast: true")
+      // .attr('event-set__enter', "_event: mouseenter;
+      // .attr('change-color-on-hover', "#ffed2d")
       .on("mouseenter", function(d,i) {
         d3.select(this).transition().duration(10)
            .attr('color', "#ffed2d");
@@ -356,3 +358,21 @@ AFRAME.registerComponent('listen-right', {
     });
   }
 });
+
+// AFRAME.registerComponent('change-color-on-hover', {
+//   schema: {
+//     color: {default: 'red'}
+//   },
+//   init: function () {
+//     var data = this.data;
+//     var el = this.el;  // <a-box>
+//     var defaultColor = el.getAttribute('material').color;
+//     el.addEventListener('mouseenter', function () {
+//       el.transition().duration(100)
+//            .attr('color', data.color);
+//     });
+//     el.addEventListener('mouseleave', function () {
+//       el.setAttribute('color', defaultColor);
+//     });
+//   }
+// });
