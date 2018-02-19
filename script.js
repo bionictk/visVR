@@ -1,4 +1,4 @@
-var chosen = { label: "Vehicle Name", wData: "Make", dData: "Cyl" }
+var chosen = { label: "Vehicle Name", wData: "AWD", dData: "AWD" }
 var d3 = d3, AFRAME = AFRAME;
 AFRAME.registerComponent('gridchart', {
   schema: {
@@ -135,9 +135,9 @@ AFRAME.registerComponent('gridchart', {
     var zWallHolder = d3.select("#zWall");
     zWallHolder.attr('position', '0 ' + histoHeight / 2 + ' ' + -(histoDepth + 1.5 ) / 2)
     zWallHolder.attr('geometry', "width: " + (histoWidth + 1.3) + "; height: " + histoHeight + "; depth: 0.004");
-    var xWall = d3.select("#xWall");
-    xWall.attr('position', (histoWidth + 1.3) / 2 + ' ' + histoHeight / 2 + ' 0')
-    xWall.attr('geometry', "width: " + (histoDepth + 1.5) + "; height: " + histoHeight + "; depth: 0.004");
+    var xWallHolder = d3.select("#xWall");
+    xWallHolder.attr('position', (histoWidth + 1.3) / 2 + ' ' + histoHeight / 2 + ' 0')
+    xWallHolder.attr('geometry', "width: " + (histoDepth + 1.5) + "; height: " + histoHeight + "; depth: 0.004");
     
     chartHolderEntity.attr('position' , "0 0 -3");
     chartEntity.attr('position' , -histoWidth / 2 + " 0.002 " + ((histoDepth / 2)));
@@ -270,13 +270,42 @@ AFRAME.registerComponent('gridchart', {
       
     var zWall = zWallHolder.append("a-entity")
       .attr('position', -histoWidth / 2 + ' ' + -histoHeight / 2 + ' 0.002');
-    xWall = xWall.append("a-entity")
+    var xWall = xWallHolder.append("a-entity")
       .attr('position', histoDepth / 2 + ' ' + -histoHeight / 2 + ' 0.002');
     
     // console.log(zWallBins, data)
     
-   
+    var zW_yScale = d3.scaleLinear().range([0, histoHeight]).domain([0, d3.max(zW_data, function(d) { return d.val; })]);
+                      
+    zWall.selectAll(".bar")
+      .data(zW_data)
+      .enter().append("a-box")
+      .attr("class", "bar")
+      .attr('width', blockWidth)
+      .attr('depth', 0.002)
+      .attr('height', function(d) { return zW_yScale(d.val); } )
+      .attr('color', '#FFF')
+      .attr("position", function(d) { 
+        const x = xScale(d[chosen.wData]) + blockWidth / 2;
+        const y = zW_yScale(d.val) / 2;
+        return x + ' ' + y + ' 0';
+      });
     
+    var xW_yScale = d3.scaleLinear().range([0, histoHeight]).domain([0, d3.max(xW_data, function(d) { return d.val; })]);
+                      
+    xWall.selectAll(".bar")
+      .data(xW_data)
+      .enter().append("a-box")
+      .attr("class", "bar")
+      .attr('width', blockDepth)
+      .attr('depth', 0.002)
+      .attr('height', function(d) { return xW_yScale(d.val); } )
+      .attr('color', '#FFF')
+      .attr("position", function(d) { 
+        const x = -zScale(d[chosen.dData]) - blockDepth / 2;
+        const y = xW_yScale(d.val) / 2;
+        return x + ' ' + y + ' 0';
+      });
     // zWallHolder.attr('visible', false)
   }
 });
