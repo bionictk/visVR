@@ -260,9 +260,21 @@ AFRAME.registerComponent('gridchart', {
       .attr('position', histoDepth / 2 + ' ' + -histoHeight / 2 + ' 0.002');
     
     console.log(zWallBins, data)
+    
+    var zW_yScale = d3.scaleLinear().range([histoHeight, 0]).domain([0, d3.max();
     // var depthDataArray = data.map(function(d) { return d[chosen.dData]; });
     // xWall.append("a-box")
     //   .attr('scale', '0.01 0.01 0.01')
-    
+                                                                     
+    zWall.selectAll(".bar")
+      .data(zW_data)
+      .enter().append("a-box")
+      .attr("class", "bar")
+      .attr("position", function(d) { 
+        const x = xScale(d[chosen.wData]) + blockWidth / 2;
+        return x(d.letter); })
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("width", x.bandwidth())
+      .attr("height", function(d) { return height - y(d.frequency); });
   }
 });
