@@ -8,3 +8,7 @@ As we try to answer these questions we also explore the possibilities of new rep
 
 ## Target platform
 We target the web as a platform for easy distribution and cross-platform access. Even users who do not have access to a VR device can have a taste of the experience and most of the capabilities.
+
+## Demo
+A live demo can be found here: https://aframe-d3v5.glitch.me/
+As noted above, using WebVR allows any device including desktops, mobile phones, and VR devices to be able to run the demo.
